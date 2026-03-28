@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      const { useState, useEffect, useRef } = React;
+      
+      const BookOpen = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>;
+      const User = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>;
+      const PenTool = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m12 19 7-7 3 3-7 7-3-3z"/><path d="m18 13-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="m2 2 7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>;
+      const Brain = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/><path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"/><path d="M17.599 6.5a3 3 0 0 0 .399-1.375"/></svg>;
+      const TrendingUp = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>;
+      const Upload = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>;
+      const Trophy = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>;
+      const ChevronRight = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m9 18 6-6-6-6"/></svg>;
+      const CheckCircle = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>;
+      const AlertCircle = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>;
+      const Award = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>;
+      const Star = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>;
+      const Layers = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>;
+      const ClipboardList = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M12 11h4"></path><path d="M12 16h4"></path><path d="M8 11h.01"></path><path d="M8 16h.01"></path></svg>;
+      const ImageIcon = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>;
+      const MessageSquare = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>;
+      const Trash2 = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>;
+      const Mic = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>;
+      const ExternalLink = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>;
+      const Volume2 = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>;
+      const Users = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>;
+
+      // --- ENTER YOUR ACTUAL API KEY HERE ---
+      const apiKey = "YOUR_GEMINI_API_KEY_HERE"; 
+
+      // --- Mock google.script.run for local Canvas or GitHub Pages preview ---
+      if (typeof window.google === 'undefined') {
+        window.google = {
+          script: {
+            run: {
+              withSuccessHandler: function(cb) {
+                return {
+                  withFailureHandler: function(fcb) {
+                    return {
+                      loadAppData: function() {
+                        try {
+                          const data = localStorage.getItem('LC_STUDY_HUB_DATA');
+                          setTimeout(() => cb(data ? JSON.parse(data) : null), 200);
+                        } catch(e) { fcb(e); }
+                      },
+                      saveAppData: function(data) {
+                        try {
+                          localStorage.setItem('LC_STUDY_HUB_DATA', JSON.stringify(data));
+                          setTimeout(() => cb(true), 200);
+                        } catch(e) { fcb(e); }
+                      }
+                    };
+                  },
+                  loadAppData: function() {
+                    try {
+                      const data = localStorage.getItem('LC_STUDY_HUB_DATA');
+                      setTimeout(() => cb(data ? JSON.parse(data) : null), 200);
+                    } catch(e) { setTimeout(() => cb(null), 200); }
+                  },
+                  saveAppData: function(data) {
+                    try {
+                      localStorage.setItem('LC_STUDY_HUB_DATA', JSON.stringify(data));
+                      setTimeout(() => cb(true), 200);
+                    } catch(e) { setTimeout(() => cb(false), 200); }
+                  }
+                };
+              }
+            }
+          }
+        };
+      }
+
+      const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+      const callGeminiAPI = async (prompt, systemInstruction, schema = null, mediaData = null, model = 'gemini-2.5-flash') => {
+        if (!apiKey || apiKey === "YOUR_GEMINI_API_KEY_HERE") {
+           throw new Error("Configuration Error: Please paste your actual Gemini API key into the 'apiKey' variable at the top of the code.");
+        }
+        
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+        
+        const parts = [];
+        if (prompt) parts.push({ text: prompt });
+        
+        if (mediaData) {
+          parts.push({
+            inlineData: { mimeType: mediaData.mimeType, data: mediaData.data }
+          });
+        }
+
+        const payload = {
+          contents: [{ parts: parts }],
+          systemInstruction: { parts: [{ text: systemInstruction }] }
+        };
+
+        if (schema) {
+          payload.generationConfig = { responseMimeType: "application/json", responseSchema: schema };
+        }
+
+        const retries = [1000, 2000, 4000, 8000];
+        let attempt = 0;
+
+        while (attempt <= retries.length) {
+          try {
+            const response = await fetch(url, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+              const errData = await response.json().catch(() => ({}));
+              throw new Error(`API Error ${response.status}: ${errData?.error?.message || response.statusText}`);
+            }
+
+            const data = await response.json();
+            const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (!text) throw new Error("Empty response from Gemini");
+
+            return schema ? JSON.parse(text) : text;
+          } catch (error) {
+            if (attempt === retries.length) {
+              console.error("Gemini API failed:", error);
+              throw error;
+            }
+            await delay(retries[attempt]);
+            attempt++;
+          }
+        }
+      };
+
+      const LEAVING_CERT_CORE_SUBJECTS = ["English", "Geography", "Maths", "Art", "Technology", "Biology"];
+
+      const SYLLABUS_DATA = {
+        "English": {
+          "Higher": [
+            { title: "Paper 1: Comprehending & Composing", topics: ["Language of Information", "Language of Argument", "Language of Persuasion", "Language of Narration", "Personal Essays", "Short Stories / Feature Articles"] },
+            { title: "Paper 2: Single Text", topics: ["Character Analysis", "Thematic Exploration", "Imagery and Symbolism", "Author's Purpose / Stagecraft"] },
+            { title: "Paper 2: Comparative Study", topics: ["Theme or Issue", "Literary Genre", "Cultural Context", "General Vision and Viewpoint"] },
+            { title: "Paper 2: Poetry", topics: ["Prescribed Poetry (Focus on specific authors)", "Unseen Poetry Analysis", "Poetic Techniques & Imagery"] }
+          ],
+          "Ordinary": [
+            { title: "Paper 1: Comprehending & Composing", topics: ["Reading Comprehension", "Personal Writing", "Functional Writing (Letters/Reports)"] },
+            { title: "Paper 2: Single Text & Comparative", topics: ["Single Text: Key Moments", "Single Text: Character Study", "Comparative: Theme", "Comparative: Social Setting"] },
+            { title: "Paper 2: Poetry", topics: ["Prescribed Poetry (Core Themes)", "Unseen Poetry (Personal Response)"] }
+          ]
+        },
+        "Maths": {
+          "Higher": [
+            { title: "Strand 1: Statistics and Probability", topics: ["Representing Data", "Statistical Measures", "Probability Theory", "Bernoulli Trials", "Normal Distribution & Inferential Statistics"] },
+            { title: "Strand 2: Geometry and Trigonometry", topics: ["Synthetic Geometry", "Co-ordinate Geometry (Line & Circle)", "Trigonometry (2D and 3D)", "Trigonometric Functions & Formulas"] },
+            { title: "Strand 3: Number", topics: ["Number Systems", "Indices and Surds", "Arithmetic & Financial Maths", "Complex Numbers"] },
+            { title: "Strand 4: Algebra", topics: ["Expressions and Equations", "Inequalities", "Roots of Polynomials", "Proof by Induction"] },
+            { title: "Strand 5: Functions", topics: ["Functions & Graphs", "Differential Calculus", "Integral Calculus", "Applications of Calculus"] }
+          ],
+          "Ordinary": [
+            { title: "Strand 1: Statistics and Probability", topics: ["Representing Data", "Probability Fundamentals", "Normal Distribution Basics"] },
+            { title: "Strand 2: Geometry and Trigonometry", topics: ["Co-ordinate Geometry (Line)", "Co-ordinate Geometry (Circle - Basic)", "Trigonometry (Right-angled Triangles)"] },
+            { title: "Strand 3: Number", topics: ["Fractions, Decimals, Percentages", "Financial Maths", "Complex Numbers (Arithmetic)"] },
+            { title: "Strand 4: Algebra", topics: ["Linear and Quadratic Equations", "Simultaneous Equations", "Inequalities"] },
+            { title: "Strand 5: Functions", topics: ["Graphing Functions", "Basic Differentiation"] }
+          ]
+        },
+        "Geography": {
+          "Higher": [
+            { title: "Core Unit 1: Physical Environment", topics: ["Tectonic Cycle", "The Rock Cycle", "Fluvial Processes (Rivers)", "Coastal/Glacial Processes", "Weathering and Mass Movement"] },
+            { title: "Core Unit 2: Regional Geography", topics: ["Concept of a Region", "Irish Regions (Contrasting)", "European Regions", "Sub-Continental Regions", "Complexity of Regions"] },
+            { title: "Electives (Choose 1)", topics: ["Economic Activities", "The Human Environment (Population/Urban)"] },
+            { title: "Options (Choose 1 - Essay Format)", topics: ["Global Interdependence", "Geoecology (Soils and Biomes)", "Culture and Identity", "The Atmosphere-Ocean Environment"] }
+          ],
+          "Ordinary": [
+            { title: "Core Unit 1: Physical Environment", topics: ["Plate Tectonics & Earthquakes", "Rocks", "Rivers & Coasts", "Weathering"] },
+            { title: "Core Unit 2: Regional Geography", topics: ["Regions of Ireland", "European Regions (Overview)", "Sub-Continental Regions (Overview)"] },
+            { title: "Electives (Choose 1)", topics: ["Economic Activities (Primary/Secondary)", "The Human Environment (Population density)"] }
+          ]
+        },
+        "Biology": {
+          "Higher": [
+            { title: "Unit 1: The Study of Life", topics: ["The Scientific Method", "Characteristics of Life", "Nutrition & Biomolecules", "Ecology Principles", "Ecosystem Fieldwork Study"] },
+            { title: "Unit 2: The Cell", topics: ["Cell Structure & Diversity", "Enzymes", "Cell Metabolism (Photosynthesis/Respiration)", "Cell Continuity & Mitosis", "Genetics, DNA & Evolution"] },
+            { title: "Unit 3: The Organism", topics: ["Diversity of Organisms (Monera, Fungi, Viruses)", "Plant Biology (Transport, Responses, Reproduction)", "Human Digestion & Circulation", "Breathing & Excretion", "Nervous & Endocrine Systems", "Human Reproduction & Immunity"] }
+          ]
+        },
+        "Art": {
+          "Higher": [
+            { title: "History & Appreciation of Art", topics: ["Art in Ireland (Pre-Christian to 20th Century)", "European Art (1000 AD to Present)", "Art Appreciation (Film, Architecture, Design)"] },
+            { title: "Practical Coursework", topics: ["Life Sketching", "Imaginative Composition or Still Life", "Design or Craftwork"] }
+          ]
+        },
+        "Technology": {
+          "Higher": [
+            { title: "Core: Foundation Modules", topics: ["A Systems Approach", "Materials and Processes", "Electronics & Control", "Information & Communications Technology", "Design and Manufacture", "Technology and Society"] },
+            { title: "Options (Choose 2)", topics: ["Applied Control Systems", "Electronics in Control", "Information & Communications Technology (Advanced)", "Manufacturing Systems", "Materials Technology"] }
+          ]
+        }
+      };
+
+      const getSyllabus = (subject, level) => {
+        if (!SYLLABUS_DATA[subject]) return [];
+        return SYLLABUS_DATA[subject][level] || SYLLABUS_DATA[subject]["Higher"];
+      };
+
+      // --- Main Application Component ---
+      function App() {
+        const [activeTab, setActiveTab] = useState('dashboard');
+        const [loading, setLoading] = useState(false);
+        const [error, setError] = useState(null);
+        const [dataLoaded, setDataLoaded] = useState(false);
+        const [inIframe, setInIframe] = useState(false);
+        const [showMicInstructions, setShowMicInstructions] = useState(false);
+
+        const [profile, setProfile] = useState({
+          name: '',
+          school: '',
+          subjects: ['English'], 
+          subjectLevels: { 'English': 'Higher' }, 
+          year: '6th Year',
+          xp: 0
+        });
+
+        // Global Context States (Saved to Google Account per subject)
+        const [subjectContexts, setSubjectContexts] = useState({});
+        const [activeFocusTopic, setActiveFocusTopic] = useState(''); 
+
+        const [activeSyllabusSubject, setActiveSyllabusSubject] = useState('');
+        const [hwSubjectContext, setHwSubjectContext] = useState('English');
+        const [hwQuestion, setHwQuestion] = useState('');
+        const [hwChat, setHwChat] = useState([]);
+        
+        const [isDiscussionMode, setIsDiscussionMode] = useState(false);
+        const [liveStatus, setLiveStatus] = useState('none'); 
+        const [currentStream, setCurrentStream] = useState("");
+        const wsRef = useRef(null);
+        const currentStreamRef = useRef(""); 
+
+        // Voice Recognition State
+        const [isRecordingAudio, setIsRecordingAudio] = useState(false);
+        const mediaRecorderRef = useRef(null);
+        const audioChunksRef = useRef([]);
+
+        const [quizTopic, setQuizTopic] = useState('');
+        const [quizSubjectContext, setQuizSubjectContext] = useState('English');
+        const [quizSource, setQuizSource] = useState('course');
+        const [quizMedia, setQuizMedia] = useState(null); 
+
+        const [activeQuiz, setActiveQuiz] = useState(null);
+        const [quizAnswers, setQuizAnswers] = useState({});
+        const [quizResults, setQuizResults] = useState(null);
+        
+        const [performanceHistory, setPerformanceHistory] = useState([]);
+        const [activityLog, setActivityLog] = useState([]);
+
+        // Detect Iframe for Voice Safety
+        useEffect(() => {
+          try {
+            setInIframe(window.self !== window.top);
+          } catch (e) {
+            setInIframe(true);
+          }
+        }, []);
+
+        // --- Data Loading & Syncing ---
+        useEffect(() => {
+          let timeoutId;
+          const successHandler = (data) => {
+            clearTimeout(timeoutId);
+            try {
+              if (data) {
+                let loadedProfile = data.profile;
+                if (loadedProfile) {
+                  if (!loadedProfile.subjects) {
+                    loadedProfile.subjects = [loadedProfile.subject || 'English'];
+                  }
+                  if (!loadedProfile.subjectLevels) {
+                    loadedProfile.subjectLevels = {};
+                    loadedProfile.subjects.forEach(s => {
+                      loadedProfile.subjectLevels[s] = loadedProfile.level || 'Higher';
+                    });
+                  }
+                  setProfile(loadedProfile);
+                  if (loadedProfile.subjects && loadedProfile.subjects.length > 0) {
+                    setActiveSyllabusSubject(loadedProfile.subjects[0]);
+                  }
+                }
+                if (data.history) setPerformanceHistory(data.history);
+                if (data.log) setActivityLog(data.log);
+                if (data.contexts) setSubjectContexts(data.contexts);
+              }
+            } catch (err) {
+              console.error("Data migration error:", err);
+            } finally {
+              setDataLoaded(true);
+            }
+          };
+
+          const failureHandler = (err) => {
+            clearTimeout(timeoutId);
+            console.error("Failed to load data from server:", err);
+            setDataLoaded(true); 
+          };
+
+          timeoutId = setTimeout(() => {
+            console.warn("Data loading timed out. Forcing app load.");
+            setDataLoaded(true);
+          }, 3000);
+
+          if (window.google && window.google.script && window.google.script.run) {
+            window.google.script.run
+              .withSuccessHandler(successHandler)
+              .withFailureHandler(failureHandler)
+              .loadAppData();
+          } else {
+             setTimeout(() => successHandler(null), 200);
+          }
+          
+          return () => clearTimeout(timeoutId);
+        }, []);
+
+        useEffect(() => {
+          if (profile.subjects.length > 0) {
+            if (!profile.subjects.includes(activeSyllabusSubject)) setActiveSyllabusSubject(profile.subjects[0]);
+            if (!profile.subjects.includes(hwSubjectContext)) setHwSubjectContext(profile.subjects[0]);
+            if (!profile.subjects.includes(quizSubjectContext)) setQuizSubjectContext(profile.subjects[0]);
+          }
+        }, [profile.subjects]);
+
+        useEffect(() => {
+          if (activeTab !== 'homework' || !isDiscussionMode) {
+             disconnectLiveAPI();
+          }
+        }, [activeTab, isDiscussionMode]);
+
+        const persistData = (newProfile = null, newHistory = null, newLog = null, newContexts = null) => {
+          const dataToSave = {
+            profile: newProfile || profile,
+            history: newHistory || performanceHistory,
+            log: newLog || activityLog,
+            contexts: newContexts || subjectContexts
+          };
+          if (window.google && window.google.script && window.google.script.run) {
+            window.google.script.run.withSuccessHandler(() => {
+              console.log("Data synced.");
+            }).withFailureHandler((err) => {
+              console.error("Failed to sync data:", err);
+            }).saveAppData(dataToSave);
+          }
+        };
+
+        const addXP = (amount) => {
+          const newProfile = { ...profile, xp: profile.xp + amount };
+          setProfile(newProfile);
+          return newProfile;
+        };
+
+        const logActivity = (type, subject, details, result) => {
+          const newEntry = {
+            id: Date.now(),
+            date: new Date().toLocaleString(),
+            type,
+            subject,
+            details,
+            result
+          };
+          const newLog = [newEntry, ...activityLog];
+          setActivityLog(newLog);
+          return newLog;
+        };
+
+        const getTopicStats = (subject, topic) => {
+          const topicHistory = performanceHistory.filter(h => h.subject === subject && h.topic === topic);
+          if (topicHistory.length === 0) return null;
+          const last = topicHistory[topicHistory.length - 1].score;
+          const avg = Math.round(topicHistory.reduce((acc, curr) => acc + curr.score, 0) / topicHistory.length);
+          return { last, avg };
+        };
+
+        const getSyllabusCardColor = (avgScore) => {
+          if (avgScore >= 80) return 'bg-green-50 border-green-200';
+          if (avgScore >= 50) return 'bg-yellow-50 border-yellow-300';
+          return 'bg-red-50 border-red-200';
+        };
+
+        const speakText = (text) => {
+          if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel(); 
+            const cleanText = text.replace(/\*\*/g, '').replace(/\*/g, '');
+            const utterance = new SpeechSynthesisUtterance(cleanText);
+            window.speechSynthesis.speak(utterance);
+          } else {
+            setError("Text-to-speech is not supported in your browser.");
+          }
+        };
+
+        const toggleMicrophoneNative = async () => {
+          if (isRecordingAudio) {
+             mediaRecorderRef.current.stop();
+             setIsRecordingAudio(false);
+             return;
+          }
+
+          if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+             setError("Microphone API blocked by Google Apps Script security. Please click 'Learn More' at the top of the screen.");
+             setShowMicInstructions(true);
+             return;
+          }
+
+          try {
+             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+             const mediaRecorder = new MediaRecorder(stream);
+             mediaRecorderRef.current = mediaRecorder;
+             audioChunksRef.current = [];
+
+             mediaRecorder.ondataavailable = (e) => {
+                if (e.data.size > 0) audioChunksRef.current.push(e.data);
+             };
+
+             mediaRecorder.onstop = () => {
+                const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+                const reader = new FileReader();
+                reader.readAsDataURL(audioBlob);
+                reader.onloadend = () => {
+                   const base64Audio = reader.result.split(',')[1];
+                   handleAskHomeworkAudio(base64Audio, 'audio/webm');
+                };
+                stream.getTracks().forEach(track => track.stop()); // Close mic
+             };
+
+             mediaRecorder.start();
+             setIsRecordingAudio(true);
+          } catch (err) {
+             console.error(err);
+             setError("Microphone blocked. If you are in Google Apps Script, you MUST click 'Learn More' at the top for details.");
+             setShowMicInstructions(true);
+          }
+        };
+
+        const disconnectLiveAPI = () => {
+          if (wsRef.current) {
+            wsRef.current.close();
+            wsRef.current = null;
+          }
+          setLiveStatus('none');
+          setCurrentStream("");
+          currentStreamRef.current = "";
+        };
+
+        const handleStartLiveDiscussion = () => {
+          if (!apiKey || apiKey === "YOUR_GEMINI_API_KEY_HERE") {
+             setError("Configuration Error: Please paste your actual Gemini API key into the 'apiKey' variable at the top of the code to use the Live Discussion feature.");
+             return;
+          }
+
+          setIsDiscussionMode(true);
+          setHwChat([]);
+          setError(null);
+          setCurrentStream("");
+          currentStreamRef.current = "";
+          setLiveStatus('connecting');
+          setLoading(true);
+
+          const currentLevel = profile.subjectLevels[hwSubjectContext] || 'Higher';
+          const systemPrompt = `You are a live Socratic tutor for an Irish Leaving Certificate student studying ${hwSubjectContext} at ${currentLevel} level.
+          You are initiating a Live Discussion.
+          RULE 1: Do NOT give long explanations.
+          RULE 2: Ask exactly ONE probing question at a time to test their understanding.
+          RULE 3: Wait for their answer, evaluate it, gently correct if needed, and ask the next logical question to deepen understanding.`;
+          
+          const currentContext = subjectContexts[hwSubjectContext];
+          let contextString = currentContext ? `Based on this context material:\n${currentContext}\n` : `Based on general ${hwSubjectContext} syllabus.\n`;
+          if (activeFocusTopic) {
+            contextString += `Specific Focus Topic: ${activeFocusTopic}\n`;
+          }
+          
+          const initialContext = `Start a Socratic discussion. ${contextString}Introduce the topic briefly, act like a live tutor, and ask your first question.`;
+
+          const startRestDiscussion = async () => {
+            try {
+              const response = await callGeminiAPI(initialContext, systemPrompt);
+              setHwChat([{ role: 'tutor', content: response }]);
+              speakText(response);
+              setLiveStatus('rest');
+              const newLog = logActivity("Live Discussion (REST)", hwSubjectContext, "Started Socratic discussion", "In Progress");
+              persistData(profile, performanceHistory, newLog);
+            } catch (err) {
+              setError(`Failed to start discussion: ${err.message}`);
+              setIsDiscussionMode(false);
+              setLiveStatus('none');
+            } finally {
+              setLoading(false);
+            }
+          };
+
+          try {
+            const wsUrl = `wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1alpha.GenerativeService.BidiGenerateContent?key=${apiKey}`;
+            const ws = new WebSocket(wsUrl);
+            wsRef.current = ws;
+
+            let isSetup = false;
+
+            const connectionTimeout = setTimeout(() => {
+              if (!isSetup) {
+                if (wsRef.current) { wsRef.current.close(); wsRef.current = null; }
+                console.warn("WebSocket timed out. Falling back to REST.");
+                startRestDiscussion();
+              }
+            }, 5000);
+
+            ws.onopen = () => {
+              ws.send(JSON.stringify({
+                setup: {
+                  model: "models/gemini-2.0-flash-exp", 
+                  systemInstruction: { parts: [{ text: systemPrompt }] }
+                }
+              }));
+            };
+
+            ws.onmessage = async (event) => {
+              try {
+                let textData = event.data;
+                if (textData instanceof Blob) {
+                   textData = await textData.text();
+                }
+                const data = JSON.parse(textData);
+                
+                if (data.error) {
+                   console.error("Live API Error:", data.error.message);
+                   return; 
+                }
+
+                if (data.setupComplete) {
+                  isSetup = true;
+                  clearTimeout(connectionTimeout);
+                  setLiveStatus('ws');
+                  setLoading(false);
+                  ws.send(JSON.stringify({
+                    clientContent: {
+                      turns: [{ role: "user", parts: [{ text: initialContext }] }],
+                      turnComplete: true
+                    }
+                  }));
+                  const newLog = logActivity("Live Discussion", hwSubjectContext, "Started Socratic WebSocket session", "In Progress");
+                  persistData(profile, performanceHistory, newLog);
+                  
+                } else if (data.serverContent) {
+                  const parts = data.serverContent.modelTurn?.parts;
+                  if (parts && parts.length > 0) {
+                     const textChunk = parts[0].text || "";
+                     currentStreamRef.current += textChunk;
+                     setCurrentStream(currentStreamRef.current);
+                  }
+                  
+                  if (data.serverContent.turnComplete) {
+                     const finalText = currentStreamRef.current;
+                     if (finalText.trim()) {
+                       setHwChat(prev => [...prev, { role: 'tutor', content: finalText }]);
+                       speakText(finalText);
+                     }
+                     setCurrentStream("");
+                     currentStreamRef.current = "";
+                  }
+                }
+              } catch (err) {
+                console.error("Error parsing WS message", err);
+              }
+            };
+
+            ws.onerror = (e) => {
+              console.error("WS Error", e);
+            };
+
+            ws.onclose = (e) => {
+              clearTimeout(connectionTimeout);
+              if (!isSetup) {
+                console.warn(`WebSocket closed before setup (Code: ${e.code}). Executing REST fallback.`);
+                startRestDiscussion();
+              } else {
+                setLiveStatus('none');
+                setLoading(false);
+                if (!e.wasClean || e.code !== 1000) {
+                   setError(`Live Session Disconnected.`);
+                }
+              }
+            };
+          } catch (e) {
+            console.error("WebSocket instantiation failed:", e);
+            startRestDiscussion();
+          }
+        };
+
+        const sendToHomework = (subject, topic) => {
+          setHwSubjectContext(subject);
+          setActiveFocusTopic(topic);
+          setIsDiscussionMode(false);
+          setActiveTab('homework');
+          setHwChat([{ role: 'tutor', content: `Hi ${profile.name || 'there'}! I see you want to study **${subject} - ${topic}**. What questions do you have?` }]);
+        };
+
+        const sendToQuiz = (subject, topic) => {
+          setQuizTopic(topic);
+          setQuizSubjectContext(subject);
+          setActiveTab('study');
+        };
+
+        const toggleSubject = (subj) => {
+          const isSelected = profile.subjects.includes(subj);
+          let newSubjects;
+          let newSubjectLevels = { ...profile.subjectLevels };
+
+          if (isSelected) {
+            newSubjects = profile.subjects.filter(s => s !== subj);
+            if (newSubjects.length === 0) newSubjects = [LEAVING_CERT_CORE_SUBJECTS[0]]; 
+          } else {
+            newSubjects = [...profile.subjects, subj];
+            if (!newSubjectLevels[subj]) newSubjectLevels[subj] = 'Higher';
+          }
+          setProfile({ ...profile, subjects: newSubjects, subjectLevels: newSubjectLevels });
+        };
+
+        const handleSaveProfile = () => {
+          persistData();
+          setActiveTab('dashboard');
+        };
+
+        const handleContextFileUpload = (e, contextType, targetSubject) => {
+          const file = e.target.files[0];
+          if (!file) return;
+
+          if (contextType === 'quizMedia' && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+              const base64 = event.target.result.split(',')[1];
+              setQuizMedia({ mimeType: file.type, data: base64, name: file.name });
+            };
+            reader.readAsDataURL(file);
+          } else {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+              const currentContext = subjectContexts[targetSubject] || '';
+              const newContexts = { 
+                ...subjectContexts, 
+                [targetSubject]: currentContext + "\n\n--- Attached Notes ---\n" + event.target.result 
+              };
+              setSubjectContexts(newContexts);
+              persistData(profile, performanceHistory, activityLog, newContexts);
+            };
+            reader.readAsText(file);
+          }
+        };
+
+        const handleAskHomeworkAudio = async (base64Audio, mimeType) => {
+          const newChat = [...hwChat, { role: 'user', content: '🎤 [Voice Message Sent]' }];
+          setHwChat(newChat);
+          setLoading(true);
+          setError(null);
+
+          const currentLevel = profile.subjectLevels[hwSubjectContext] || 'Higher';
+          let systemPrompt = '';
+          if (isDiscussionMode) {
+             systemPrompt = `You are a live Socratic tutor for an Irish Leaving Certificate student studying ${hwSubjectContext} at ${currentLevel} level. The user has provided an audio message.
+             RULE 1: Evaluate the student's audio answer.
+             RULE 2: If they are wrong, guide them to the answer, do not just give it.
+             RULE 3: Ask ONE relevant follow-up question to test the next concept. Keep it highly conversational.`;
+          } else {
+             systemPrompt = `You are an expert Irish Leaving Certificate tutor for ${profile.year} studying ${hwSubjectContext} at ${currentLevel} level. The user has provided an audio question.
+             Your goal is to help the student understand their homework. 
+             CRITICAL: Do NOT just give the direct answer. Guide them, provide hints, explain concepts, and ask leading questions.`;
+          }
+          
+          const savedContext = subjectContexts[hwSubjectContext];
+          let contextString = savedContext ? `Context material from student notes/syllabus selection:\n${savedContext}\n\n` : "";
+          if (activeFocusTopic) {
+            contextString += `Focus Topic: ${activeFocusTopic}\n\n`;
+          }
+          
+          const prompt = `${contextString}Please transcribe and respond to the attached audio message.`;
+          const mediaObj = { mimeType: mimeType, data: base64Audio };
+
+          try {
+            const response = await callGeminiAPI(prompt, systemPrompt, null, mediaObj);
+            setHwChat([...newChat, { role: 'tutor', content: response }]);
+            if (isDiscussionMode) speakText(response);
+            
+            const newProfile = addXP(10); 
+            const newLog = logActivity(isDiscussionMode ? "Live Discussion" : "Homework", hwSubjectContext, "Sent Voice Audio Message", "+10 XP");
+            persistData(newProfile, performanceHistory, newLog);
+          } catch (err) {
+            setError(`Failed to process audio: ${err.message}`);
+          } finally {
+            setLoading(false);
+          }
+        };
+
+        const handleAskHomework = async () => {
+          if (!hwQuestion.trim()) return;
+          
+          const userMsg = hwQuestion;
+          const newChat = [...hwChat, { role: 'user', content: userMsg }];
+          setHwChat(newChat);
+          setHwQuestion('');
+          setError(null);
+
+          if (isDiscussionMode && liveStatus === 'ws' && wsRef.current) {
+            wsRef.current.send(JSON.stringify({
+                clientContent: {
+                    turns: [{ role: "user", parts: [{ text: userMsg }] }],
+                    turnComplete: true
+                }
+            }));
+            const newProfile = addXP(10); 
+            const newLog = logActivity("Live Discussion", hwSubjectContext, userMsg.substring(0, 50) + "...", "+10 XP");
+            persistData(newProfile, performanceHistory, newLog);
+            return; 
+          }
+
+          setLoading(true);
+          const currentLevel = profile.subjectLevels[hwSubjectContext] || 'Higher';
+          
+          let systemPrompt = '';
+          if (isDiscussionMode) {
+             systemPrompt = `You are a live Socratic tutor for an Irish Leaving Certificate student studying ${hwSubjectContext} at ${currentLevel} level.
+             RULE 1: Evaluate the student's answer.
+             RULE 2: If they are wrong, guide them to the answer, do not just give it.
+             RULE 3: Ask ONE relevant follow-up question to test the next concept. Keep it highly conversational.`;
+          } else {
+             systemPrompt = `You are an expert Irish Leaving Certificate tutor for ${profile.year} studying ${hwSubjectContext} at ${currentLevel} level. 
+             Your goal is to help the student understand their homework. 
+             CRITICAL: Do NOT just give the direct answer. Guide them, provide hints, explain concepts, and ask leading questions.`;
+          }
+          
+          const savedContext = subjectContexts[hwSubjectContext];
+          let contextString = savedContext ? `Context material from student notes/syllabus selection:\n${savedContext}\n\n` : "";
+          if (activeFocusTopic) {
+            contextString += `Focus Topic: ${activeFocusTopic}\n\n`;
+          }
+          
+          let prompt = `${contextString}Student's question: ${userMsg}`;
+          if (isDiscussionMode) {
+            const chatHistoryText = newChat.map(m => `${m.role === 'tutor' ? 'Tutor' : 'Student'}: ${m.content}`).join('\n');
+            prompt = `${contextString}Here is the conversation history:\n${chatHistoryText}\n\nRespond as the Tutor to the student's last message.`;
+          }
+
+          try {
+            const response = await callGeminiAPI(prompt, systemPrompt);
+            setHwChat([...newChat, { role: 'tutor', content: response }]);
+            if (isDiscussionMode) speakText(response);
+            
+            const newProfile = addXP(10); 
+            const newLog = logActivity(isDiscussionMode ? "Live Discussion" : "Homework", hwSubjectContext, userMsg.substring(0, 50) + "...", "+10 XP");
+            persistData(newProfile, performanceHistory, newLog);
+          } catch (err) {
+            setError(`Failed to get a response: ${err.message}`);
+          } finally {
+            setLoading(false);
+          }
+        };
+
+        const handleGenerateQuiz = async () => {
+          const hasContext = (subjectContexts[quizSubjectContext] || '').trim();
+          if (!quizTopic.trim() && !quizMedia && !hasContext) return;
+          
+          setLoading(true);
+          setError(null);
+          setActiveQuiz(null);
+          setQuizResults(null);
+          setQuizAnswers({});
+
+          const currentQuizLevel = profile.subjectLevels[quizSubjectContext] || 'Higher';
+          const systemPrompt = `You are an expert Irish Leaving Certificate examiner for ${quizSubjectContext} (${currentQuizLevel} level).`;
+          
+          const sourceInstruction = quizSource === 'past_papers' 
+            ? "CRITICAL INSTRUCTION: Style these questions EXACTLY like historical Irish Leaving Certificate past exam paper questions for this subject and level. Emulate the wording, typical mark allocation phrasing, and structure used by the State Examinations Commission." 
+            : "Base the questions on general Leaving Certificate course content and syllabus requirements.";
+
+          const topicInstruction = quizTopic ? `Topic: "${quizTopic}"` : "Create questions based on the provided uploaded file/image/saved context content.";
+          const contextInstruction = hasContext ? `\nUse this context material provided by the student:\n${hasContext}` : "";
+
+          const prompt = `Generate 3 distinct, exam-standard short-answer questions.\n${topicInstruction}\n${sourceInstruction}${contextInstruction}\nEnsure the questions match the difficulty of the ${currentQuizLevel} level.`;
+
+          const schema = {
+            type: "OBJECT",
+            properties: {
+              questions: {
+                type: "ARRAY",
+                items: {
+                  type: "OBJECT",
+                  properties: {
+                    id: { type: "STRING" },
+                    questionText: { type: "STRING" },
+                    hint: { type: "STRING" }
+                  }
+                }
+              }
+            }
+          };
+
+          try {
+            const generated = await callGeminiAPI(prompt, systemPrompt, schema, quizMedia);
+            setActiveQuiz(generated.questions);
+            setQuizMedia(null);
+          } catch (err) {
+            setError(`Quiz Generation Error: ${err.message}`);
+          } finally {
+            setLoading(false);
+          }
+        };
+
+        const submitQuiz = async () => {
+          setLoading(true);
+          setError(null);
+
+          const currentQuizLevel = profile.subjectLevels[quizSubjectContext] || 'Higher';
+          const systemPrompt = `You are a strict but fair Irish Leaving Certificate examiner for ${quizSubjectContext} (${currentQuizLevel} level). 
+          Grade the student's short answers accurately according to the standard marking scheme. Provide constructive, encouraging feedback highlighting exactly what syllabus areas need work.`;
+          
+          const prompt = `Topic: ${quizTopic || 'Uploaded Content'}\n\nHere are the questions and the student's answers:\n` + 
+            activeQuiz.map(q => `Q (${q.id}): ${q.questionText}\nStudent Answer: ${quizAnswers[q.id] || "No answer provided"}`).join('\n\n');
+
+          const schema = {
+            type: "OBJECT",
+            properties: {
+              overallScore: { type: "NUMBER", description: "Score out of 100" },
+              feedback: { type: "STRING", description: "General feedback on the performance and what syllabus areas to revise" },
+              questionGrades: {
+                type: "ARRAY",
+                items: {
+                  type: "OBJECT",
+                  properties: {
+                    id: { type: "STRING" },
+                    score: { type: "NUMBER", description: "Score out of 10 for this question" },
+                    correction: { type: "STRING", description: "How to improve or what was right/wrong" }
+                  }
+                }
+              }
+            }
+          };
+
+          try {
+            const results = await callGeminiAPI(prompt, systemPrompt, schema);
+            setQuizResults(results);
+            
+            const newScoreEntry = {
+              date: new Date().toISOString().split('T')[0],
+              subject: quizSubjectContext,
+              topic: quizTopic || 'Custom Content',
+              score: results.overallScore,
+              maxScore: 100
+            };
+            
+            const newHistory = [...performanceHistory, newScoreEntry];
+            setPerformanceHistory(newHistory);
+            
+            const xpGained = 50 + Math.floor(results.overallScore / 2);
+            const newProfile = addXP(xpGained);
+            const newLog = logActivity("Quiz Taken", quizSubjectContext, quizTopic || 'Custom Content', `Scored ${results.overallScore}% (+${xpGained} XP)`);
+
+            persistData(newProfile, newHistory, newLog);
+
+          } catch (err) {
+            setError(`Grading Error: ${err.message}`);
+          } finally {
+            setLoading(false);
+          }
+        };
+
+        const handleReviewWithTutor = async () => {
+          const initialMsg = `I just took a quiz on ${quizSubjectContext} - ${quizTopic} and scored ${quizResults.overallScore}%. \n\nHere is the feedback I received from the examiner: "${quizResults.feedback}". \n\nCan you recommend what specific parts of the syllabus I should revise and help me understand where I went wrong?`;
+          
+          setHwSubjectContext(quizSubjectContext);
+          setActiveFocusTopic(quizTopic);
+          
+          const newChat = [...hwChat, { role: 'user', content: initialMsg }];
+          setHwChat(newChat);
+          setIsDiscussionMode(false);
+          setActiveTab('homework');
+          setLoading(true);
+          setError(null);
+
+          const currentLevel = profile.subjectLevels[quizSubjectContext] || 'Higher';
+          const systemPrompt = `You are an expert Irish Leaving Certificate tutor for ${profile.year} studying ${quizSubjectContext} at ${currentLevel} level. The student just finished a quiz and needs help revising. Acknowledge their score, highlight exactly what areas of the syllabus they should review based on the feedback, and offer to explain any specific concept they struggled with. Be encouraging.`;
+          
+          const prompt = `Student Message: ${initialMsg}`;
+
+          try {
+            const response = await callGeminiAPI(prompt, systemPrompt);
+            setHwChat([...newChat, { role: 'tutor', content: response }]);
+            const newLog = logActivity("Tutor Review", quizSubjectContext, `Requested revision strategy for ${quizTopic}`, "Completed");
+            persistData(profile, performanceHistory, newLog);
+          } catch (err) {
+            setError(`Tutor failed to respond: ${err.message}`);
+          } finally {
+            setLoading(false);
+          }
+        };
+
+        const calculateLevel = (xp) => Math.floor(xp / 100) + 1;
+        const currentLevel = calculateLevel(profile.xp);
+        const xpForNextLevel = currentLevel * 100;
+        const progressPercent = (profile.xp % 100) / 100 * 100;
+
+        if (!dataLoaded) return <div className="min-h-screen flex items-center justify-center bg-slate-50 text-indigo-600 font-bold">Loading your Study Hub...</div>;
+
+        return (
+          <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row font-sans text-slate-800">
+            {inIframe && (
+               <div className="absolute top-0 left-0 right-0 bg-indigo-600 text-white p-2 text-center text-sm z-50 flex justify-center items-center gap-4">
+                  <span>🎙️ Voice input is blocked by Google Apps Script security, but text chatting works perfectly!</span>
+                  <button onClick={() => setShowMicInstructions(true)} className="bg-white text-indigo-700 px-3 py-1 rounded font-bold flex items-center gap-1 hover:bg-indigo-50">
+                    Learn More <ExternalLink className="w-4 h-4"/>
+                  </button>
+               </div>
+            )}
+
+            {showMicInstructions && (
+               <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
+                 <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-xl relative">
+                   <button onClick={() => setShowMicInstructions(false)} className="absolute top-4 right-4 text-slate-400 hover:text-slate-800">
+                     &times;
+                   </button>
+                   <h3 className="text-xl font-bold mb-4 flex items-center gap-2"><Mic className="text-indigo-600"/> Voice Input Restricted</h3>
+                   <p className="text-slate-600 mb-4">Because of strict browser security rules, Google Apps Script permanently blocks microphone access inside all of its Web Apps.</p>
+                   <div className="bg-green-50 border border-green-200 p-3 rounded-lg mb-4">
+                     <p className="text-green-800 text-sm font-bold mb-1">Text Chat Works Perfectly!</p>
+                     <p className="text-green-700 text-sm">You don't need a microphone to use the Live Discussion mode. Just type your responses into the chat box!</p>
+                   </div>
+                   <p className="text-slate-600 mb-6 text-sm">If you absolutely must use voice input, you will need to host this HTML file on a secure external platform (like GitHub Pages or Vercel) instead of Google Apps Script.</p>
+                   <button onClick={() => setShowMicInstructions(false)} className="w-full bg-indigo-600 text-white py-3 rounded-xl font-bold hover:bg-indigo-700">Got it, I'll type!</button>
+                 </div>
+               </div>
+            )}
+            
+            <nav className={`w-full md:w-64 bg-indigo-900 text-white flex flex-col md:min-h-screen shadow-xl z-10 shrink-0 ${inIframe ? 'mt-10' : ''}`}>
+              <div className="p-6 flex items-center gap-3 border-b border-indigo-800">
+                <Award className="w-8 h-8 text-yellow-400" />
+                <h1 className="text-xl font-bold tracking-tight">LC Study Hub</h1>
+              </div>
+              
+              <div className="p-6 border-b border-indigo-800 bg-indigo-950/30">
+                <p className="font-medium text-lg">{profile.name || 'Student'}</p>
+                <p className="text-indigo-300 text-sm mb-3">{profile.subjects.length} Subjects Selected</p>
+                
+                <div className="flex justify-between text-xs mb-1">
+                  <span>Level {currentLevel}</span>
+                  <span>{profile.xp} / {xpForNextLevel} XP</span>
+                </div>
+                <div className="w-full bg-indigo-950 rounded-full h-2">
+                  <div className="bg-yellow-400 h-2 rounded-full transition-all duration-500" style={{ width: `${progressPercent}%` }}></div>
+                </div>
+              </div>
+
+              <div className="flex-1 py-4 flex flex-col gap-2 px-4 overflow-y-auto">
+                <NavButton icon={<TrendingUp/>} label="Dashboard" active={activeTab === 'dashboard'} onClick={() => setActiveTab('dashboard')} />
+                <NavButton icon={<Layers/>} label="Syllabus Heatmap" active={activeTab === 'syllabus'} onClick={() => setActiveTab('syllabus')} />
+                <NavButton icon={<PenTool/>} label="Homework Tutor" active={activeTab === 'homework'} onClick={() => setActiveTab('homework')} />
+                <NavButton icon={<Brain/>} label="Study & Quizzes" active={activeTab === 'study'} onClick={() => setActiveTab('study')} />
+                <NavButton icon={<ClipboardList/>} label="Activity Log" active={activeTab === 'activity'} onClick={() => setActiveTab('activity')} />
+                <NavButton icon={<User/>} label="Profile Setup" active={activeTab === 'profile'} onClick={() => setActiveTab('profile')} />
+              </div>
+            </nav>
+
+            <main className={`flex-1 overflow-y-auto p-4 md:p-8 relative ${inIframe ? 'mt-10' : ''}`}>
+              {error && (
+                <div className="mb-6 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 flex items-center justify-between gap-3 rounded-lg shadow-sm">
+                  <div className="flex items-center gap-3">
+                    <AlertCircle className="w-5 h-5 shrink-0" />
+                    <p>{error}</p>
+                  </div>
+                  <button onClick={() => setError(null)} className="font-bold hover:text-red-900">&times;</button>
+                </div>
+              )}
+
+              {/* --- VIEW: SYLLABUS HEATMAP --- */}
+              {activeTab === 'syllabus' && (
+                <div className="max-w-5xl mx-auto space-y-6">
+                  <header className="mb-8 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                          <Layers className="text-indigo-600 w-8 h-8"/> 
+                          Syllabus Heatmap
+                        </h2>
+                        <p className="text-slate-500 mt-2 text-lg">
+                          Identify your weak areas instantly. Take quizzes to populate the data.
+                        </p>
+                      </div>
+                      <span className="bg-indigo-100 text-indigo-800 text-sm font-bold px-3 py-1 rounded-full">{profile.subjectLevels[activeSyllabusSubject] || 'Higher'} Level</span>
+                    </div>
+                    
+                    <div className="flex flex-wrap gap-2 mt-6">
+                      {profile.subjects.map(subj => (
+                        <button 
+                          key={subj}
+                          onClick={() => setActiveSyllabusSubject(subj)}
+                          className={`px-4 py-2 rounded-lg font-bold transition-colors ${activeSyllabusSubject === subj ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                        >
+                          {subj}
+                        </button>
+                      ))}
+                    </div>
+                  </header>
+
+                  <div className="space-y-6">
+                    {getSyllabus(activeSyllabusSubject, profile.subjectLevels[activeSyllabusSubject] || 'Higher').map((unit, idx) => (
+                      <div key={idx} className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                        <div className="bg-slate-50 border-b border-slate-200 px-6 py-4">
+                          <h3 className="text-xl font-bold text-slate-800">{unit.title}</h3>
+                        </div>
+                        <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                          {unit.topics.map((topic, tIdx) => {
+                            const stats = getTopicStats(activeSyllabusSubject, topic);
+                            const cardBg = stats ? getSyllabusCardColor(stats.avg) : 'bg-white border-slate-200';
+
+                            return (
+                              <div key={tIdx} className={`${cardBg} border p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between h-full`}>
+                                <div className="mb-4">
+                                  <p className="font-bold text-slate-800 leading-tight">{topic}</p>
+                                  {stats && (
+                                    <div className="mt-2 text-xs text-slate-700 flex justify-between bg-white/60 p-2 rounded border border-white/40">
+                                      <span>Avg: <strong className={stats.avg >= 80 ? 'text-green-700' : stats.avg >= 50 ? 'text-yellow-700' : 'text-red-700'}>{stats.avg}%</strong></span>
+                                      <span>Last: <strong>{stats.last}%</strong></span>
+                                    </div>
+                                  )}
+                                  {!stats && <p className="mt-2 text-xs text-slate-400 italic">No quizzes taken</p>}
+                                </div>
+                                <div className="flex gap-2 mt-auto">
+                                  <button 
+                                    onClick={() => sendToHomework(activeSyllabusSubject, topic)}
+                                    className="flex-1 bg-white hover:bg-indigo-50 border border-indigo-100 text-indigo-700 text-sm font-semibold py-2 px-2 rounded-lg transition-colors flex items-center justify-center gap-1"
+                                  >
+                                    <PenTool className="w-3.5 h-3.5"/> Tutor
+                                  </button>
+                                  <button 
+                                    onClick={() => sendToQuiz(activeSyllabusSubject, topic)}
+                                    className="flex-1 bg-white hover:bg-green-50 border border-green-100 text-green-700 text-sm font-semibold py-2 px-2 rounded-lg transition-colors flex items-center justify-center gap-1"
+                                  >
+                                    <Brain className="w-3.5 h-3.5"/> Quiz
+                                  </button>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* --- VIEW: PROFILE --- */}
+              {activeTab === 'profile' && (
+                <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+                  <h2 className="text-2xl font-bold mb-6 text-slate-800 flex items-center gap-2">
+                    <User className="text-indigo-600" /> Student Profile
+                  </h2>
+                  <div className="space-y-6">
+                    <InputField label="Full Name" value={profile.name} onChange={(e) => setProfile({...profile, name: e.target.value})} placeholder="e.g. Siobhán O'Connor" />
+                    <InputField label="School Name" value={profile.school} onChange={(e) => setProfile({...profile, school: e.target.value})} placeholder="e.g. Presentation College" />
+                    
+                    <div>
+                      <label className="block text-sm font-bold text-slate-700 mb-2">My Subjects & Levels (Core List)</label>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        {LEAVING_CERT_CORE_SUBJECTS.map(subj => {
+                          const isSelected = profile.subjects.includes(subj);
+                          return (
+                            <div key={subj} className={`flex items-center justify-between p-3 rounded-xl border transition-all ${isSelected ? 'border-indigo-600 bg-indigo-50' : 'border-slate-200 bg-white hover:bg-slate-50'}`}>
+                              <label className="flex items-center gap-3 cursor-pointer flex-1">
+                                <input 
+                                  type="checkbox" 
+                                  checked={isSelected} 
+                                  onChange={() => toggleSubject(subj)}
+                                  className="w-4 h-4 text-indigo-600 focus:ring-indigo-500 rounded"
+                                />
+                                <span className={`font-medium text-sm ${isSelected ? 'text-indigo-800' : 'text-slate-600'}`}>{subj}</span>
+                              </label>
+                              {isSelected && (
+                                <select 
+                                  className="text-sm border border-indigo-200 rounded p-1 bg-white text-indigo-800 outline-none focus:ring-1 focus:ring-indigo-500"
+                                  value={profile.subjectLevels[subj] || 'Higher'}
+                                  onChange={(e) => {
+                                    setProfile({
+                                      ...profile,
+                                      subjectLevels: { ...profile.subjectLevels, [subj]: e.target.value }
+                                    });
+                                  }}
+                                >
+                                  <option value="Higher">Higher</option>
+                                  <option value="Ordinary">Ordinary</option>
+                                </select>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    <button onClick={handleSaveProfile} className="mt-4 w-full bg-indigo-600 hover:bg-indigo-700 text-white py-4 rounded-xl font-bold text-lg shadow-md transition-colors">
+                      Save Profile & Sync
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* --- VIEW: ACTIVITY LOG --- */}
+              {activeTab === 'activity' && (
+                <div className="max-w-5xl mx-auto space-y-6">
+                  <header className="mb-8">
+                    <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                      <ClipboardList className="text-indigo-600 w-8 h-8" />
+                      Activity Log
+                    </h2>
+                    <p className="text-slate-500 mt-2">Audit trail of your study sessions, questions asked, and quizzes completed.</p>
+                  </header>
+
+                  <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    {activityLog.length === 0 ? (
+                       <div className="text-center py-10 text-slate-400 bg-slate-50">
+                        No activity recorded yet. Start studying to build your audit log!
+                      </div>
+                    ) : (
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left border-collapse">
+                          <thead>
+                            <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 text-sm uppercase tracking-wider">
+                              <th className="p-4 font-bold">Date & Time</th>
+                              <th className="p-4 font-bold">Action</th>
+                              <th className="p-4 font-bold">Subject</th>
+                              <th className="p-4 font-bold">Details</th>
+                              <th className="p-4 font-bold">Result</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-slate-100">
+                            {activityLog.map(log => (
+                              <tr key={log.id} className="hover:bg-slate-50 transition-colors">
+                                <td className="p-4 text-sm text-slate-500 whitespace-nowrap">{log.date}</td>
+                                <td className="p-4 text-sm font-bold text-indigo-600 whitespace-nowrap">{log.type}</td>
+                                <td className="p-4 text-sm font-medium text-slate-700 whitespace-nowrap">{log.subject}</td>
+                                <td className="p-4 text-sm text-slate-600">{log.details}</td>
+                                <td className="p-4 text-sm font-bold text-green-600 whitespace-nowrap">{log.result}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* --- VIEW: DASHBOARD --- */}
+              {activeTab === 'dashboard' && (
+                <div className="max-w-5xl mx-auto space-y-6">
+                  <header className="mb-8">
+                    <h2 className="text-3xl font-bold text-slate-800">Welcome back, {profile.name || 'Student'}!</h2>
+                    <p className="text-slate-500 mt-2">Let's crush that Leaving Cert.</p>
+                  </header>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <StatCard icon={<Trophy className="text-yellow-500" />} title="Current Level" value={currentLevel} subtitle={`${profile.xp} Total XP`} />
+                    <StatCard icon={<CheckCircle className="text-green-500" />} title="Quizzes Taken" value={performanceHistory.length} subtitle="Keep it up!" />
+                    <StatCard icon={<TrendingUp className="text-indigo-500" />} title="Avg. Score" value={
+                      performanceHistory.length > 0 
+                      ? Math.round(performanceHistory.reduce((acc, curr) => acc + curr.score, 0) / performanceHistory.length) + '%'
+                      : 'N/A'
+                    } subtitle="Across all topics" />
+                  </div>
+
+                  <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                    <h3 className="text-xl font-bold mb-4">Topic Competency</h3>
+                    {performanceHistory.length === 0 ? (
+                      <div className="text-center py-10 text-slate-400 bg-slate-50 rounded-lg border-2 border-dashed">
+                        No data yet. Head over to the Syllabus Heatmap or Study tab to take a quiz!
+                      </div>
+                    ) : (
+                      <div className="space-y-4">
+                        {performanceHistory.map((entry, idx) => (
+                          <div key={idx} className="flex items-center gap-4">
+                            <div className="w-24 text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-1 rounded text-center truncate">{entry.subject || 'N/A'}</div>
+                            <div className="w-40 text-sm font-medium text-slate-600 truncate" title={entry.topic}>{entry.topic}</div>
+                            <div className="flex-1 h-4 bg-slate-100 rounded-full overflow-hidden">
+                              <div 
+                                className={`h-full rounded-full ${entry.score > 80 ? 'bg-green-500' : entry.score > 50 ? 'bg-yellow-400' : 'bg-red-400'}`} 
+                                style={{ width: `${entry.score}%` }}
+                              ></div>
+                            </div>
+                            <div className="w-12 text-right text-sm font-bold">{entry.score}%</div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* --- VIEW: HOMEWORK TUTOR & LIVE DISCUSSION --- */}
+              {activeTab === 'homework' && (
+                <div className="max-w-4xl mx-auto h-[85vh] flex flex-col bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden relative">
+                  <div className="p-4 border-b border-slate-200 bg-slate-50 flex flex-col md:flex-row md:justify-between items-start md:items-center gap-4">
+                    <div className="flex items-center gap-4">
+                      <h2 className="text-xl font-bold flex items-center gap-2">
+                        {isDiscussionMode ? <Users className="text-green-600"/> : <PenTool className="text-indigo-600"/>} 
+                        {isDiscussionMode ? 'Live Discussion' : 'Homework Tutor'}
+                      </h2>
+                      <select className="p-2 text-sm bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                        value={hwSubjectContext} onChange={(e) => setHwSubjectContext(e.target.value)} disabled={isDiscussionMode}>
+                        {profile.subjects.map(subj => <option key={subj} value={subj}>{subj}</option>)}
+                      </select>
+                      
+                      {isDiscussionMode && (
+                        <span className={`text-xs px-2 py-1 rounded-full font-bold ${liveStatus === 'connecting' ? 'bg-yellow-100 text-yellow-700 animate-pulse' : 'bg-green-100 text-green-700'}`}>
+                          {liveStatus === 'connecting' ? '🟡 Connecting...' : (liveStatus === 'ws' ? '🟢 Live Stream Active' : '🟢 Active')}
+                        </span>
+                      )}
+                    </div>
+                    
+                    <div className="flex items-center gap-2">
+                      {isDiscussionMode ? (
+                        <button onClick={() => { setIsDiscussionMode(false); setHwChat([]); }} className="text-sm bg-indigo-100 hover:bg-indigo-200 text-indigo-700 px-3 py-1.5 rounded-md font-medium transition-colors">
+                          Switch to Q&A
+                        </button>
+                      ) : (
+                        <button onClick={handleStartLiveDiscussion} className="text-sm bg-green-100 hover:bg-green-200 text-green-700 px-3 py-1.5 rounded-md font-medium transition-colors flex items-center gap-1">
+                          <Users className="w-4 h-4"/> Start Live Discussion
+                        </button>
+                      )}
+
+                      <div className="relative group">
+                        <button className="flex items-center gap-2 text-sm bg-white border border-slate-200 px-3 py-1.5 rounded-md hover:bg-slate-50" disabled={isDiscussionMode}>
+                          <BookOpen className="w-4 h-4"/> Edit Context
+                        </button>
+                        <div className="absolute right-0 top-[100%] pt-2 w-[350px] hidden group-hover:block z-20">
+                          <div className="bg-white border border-slate-200 shadow-xl rounded-xl p-4">
+                            <p className="text-xs text-slate-500 mb-2">Saved Context for <strong>{hwSubjectContext}</strong></p>
+                            <textarea 
+                              className="w-full h-32 p-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none resize-none mb-2 bg-slate-50"
+                              placeholder={`Paste notes or syllabus context for ${hwSubjectContext} here...`}
+                              value={subjectContexts[hwSubjectContext] || ''}
+                              onChange={(e) => setSubjectContexts({...subjectContexts, [hwSubjectContext]: e.target.value})}
+                              onBlur={() => persistData(profile, performanceHistory, activityLog, subjectContexts)}
+                            ></textarea>
+                            <div className="flex items-center gap-2">
+                              <label className="flex-1 cursor-pointer bg-slate-100 hover:bg-slate-200 text-center py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2">
+                                <Upload className="w-4 h-4"/> Upload Text
+                                <input type="file" className="hidden" accept=".txt,.json,.csv" onChange={(e) => handleContextFileUpload(e, 'text', hwSubjectContext)} />
+                              </label>
+                              <button 
+                                onClick={() => {
+                                  const newContexts = {...subjectContexts, [hwSubjectContext]: ''};
+                                  setSubjectContexts(newContexts);
+                                  persistData(profile, performanceHistory, activityLog, newContexts);
+                                }}
+                                className="px-3 py-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg text-sm font-medium transition-colors flex items-center gap-1"
+                                title="Clear Context"
+                              >
+                                <Trash2 className="w-4 h-4"/> Clear
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {activeFocusTopic && !isDiscussionMode && (
+                     <div className="bg-indigo-50 border-b border-indigo-100 text-indigo-700 px-6 py-2 text-sm flex justify-between items-center shadow-inner">
+                       <span>Currently focusing on Syllabus Topic: <strong>{activeFocusTopic}</strong></span>
+                       <button onClick={() => setActiveFocusTopic('')} className="font-bold hover:text-indigo-900">&times;</button>
+                     </div>
+                  )}
+
+                  <div className="flex-1 p-6 overflow-y-auto space-y-4 bg-slate-50/50">
+                    {hwChat.length === 0 && !isDiscussionMode && (
+                      <div className="h-full flex flex-col items-center justify-center text-slate-400 space-y-4">
+                        <MessageSquare className="w-16 h-16 opacity-20" />
+                        <p>Ask a question about your {hwSubjectContext} homework.</p>
+                        <p className="text-sm">I'll guide you to the answer, not just give it to you!</p>
+                      </div>
+                    )}
+                    
+                    {hwChat.map((msg, idx) => (
+                      <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                        <div className={`max-w-[80%] rounded-2xl p-4 shadow-sm relative group ${
+                          msg.role === 'user' ? 'bg-indigo-600 text-white rounded-br-none' : 'bg-white border border-slate-200 rounded-bl-none text-slate-700'
+                        }`}>
+                          {msg.content.split('\n').map((para, i) => <p key={i} className="mb-2 last:mb-0" dangerouslySetInnerHTML={{__html: para.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}}></p>)}
+                          
+                          {msg.role === 'tutor' && (
+                            <button 
+                              onClick={() => speakText(msg.content)} 
+                              className="absolute -right-8 top-2 p-1.5 text-slate-400 hover:text-indigo-600 bg-white border border-slate-200 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                              title="Read Aloud"
+                            >
+                              <Volume2 className="w-4 h-4"/>
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                    
+                    {currentStream && (
+                      <div className="flex justify-start">
+                        <div className="max-w-[80%] rounded-2xl p-4 shadow-sm bg-white border border-slate-200 rounded-bl-none text-slate-700 relative">
+                          <span className="absolute top-2 right-2 w-2 h-2 bg-indigo-500 rounded-full animate-ping"></span>
+                          {currentStream.split('\n').map((para, i) => <p key={i} className="mb-2 last:mb-0" dangerouslySetInnerHTML={{__html: para.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}}></p>)}
+                        </div>
+                      </div>
+                    )}
+                    
+                    {loading && liveStatus !== 'ws' && <div className="flex justify-start"><div className="bg-slate-200 animate-pulse w-32 h-10 rounded-2xl rounded-bl-none"></div></div>}
+                  </div>
+
+                  <div className="p-4 bg-white border-t border-slate-200 flex gap-2 items-center">
+                    <button 
+                      onClick={toggleMicrophoneNative}
+                      className={`p-3 rounded-xl transition-colors shrink-0 ${isRecordingAudio ? 'bg-red-100 text-red-600 animate-pulse' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                      title={isRecordingAudio ? "Stop Recording & Send" : "Start Voice Input"}
+                    >
+                      <Mic className="w-6 h-6" />
+                    </button>
+                    <input 
+                      type="text" 
+                      className="flex-1 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none"
+                      placeholder={isRecordingAudio ? "Recording audio message..." : (liveStatus === 'connecting' ? "Connecting to Live session..." : "Type your question/answer here...")}
+                      value={hwQuestion}
+                      onChange={(e) => setHwQuestion(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && handleAskHomework()}
+                      disabled={loading || isRecordingAudio || liveStatus === 'connecting'}
+                    />
+                    <button 
+                      onClick={handleAskHomework}
+                      disabled={loading || !hwQuestion.trim() || liveStatus === 'connecting' || isRecordingAudio}
+                      className={`disabled:bg-slate-300 text-white p-3 rounded-xl transition-colors flex items-center justify-center w-14 shrink-0 ${isDiscussionMode ? 'bg-green-600 hover:bg-green-700' : 'bg-indigo-600 hover:bg-indigo-700'}`}
+                    >
+                      <ChevronRight className="w-6 h-6" />
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* --- VIEW: STUDY & QUIZZES --- */}
+              {activeTab === 'study' && (
+                <div className="max-w-4xl mx-auto space-y-6">
+                  
+                  {!activeQuiz && !quizResults && (
+                    <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 text-center">
+                      <Brain className="w-16 h-16 text-indigo-600 mx-auto mb-4" />
+                      <h2 className="text-2xl font-bold mb-2">Generate Exam-Style Quiz</h2>
+                      <p className="text-slate-500 mb-8">Test your knowledge. Questions are tailored to your chosen subjects and levels.</p>
+                      
+                      <div className="max-w-md mx-auto space-y-6">
+                        <div className="text-left">
+                          <label className="block text-sm font-medium text-slate-600 mb-1">Subject</label>
+                          <select className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                            value={quizSubjectContext} onChange={(e) => setQuizSubjectContext(e.target.value)}>
+                            {profile.subjects.map(subj => <option key={subj} value={subj}>{subj}</option>)}
+                          </select>
+                        </div>
+                        
+                        <InputField 
+                          label="Topic to test" 
+                          value={quizTopic} 
+                          onChange={(e) => setQuizTopic(e.target.value)} 
+                          placeholder="Type topic, or rely on uploaded files below..." 
+                        />
+                        
+                        {/* Advanced Context / File Upload Box */}
+                        <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 text-left">
+                           <label className="block text-sm font-bold text-slate-700 mb-2">Add Files or Context (Optional)</label>
+                           <p className="text-xs text-slate-500 mb-3">Your saved context for <strong>{quizSubjectContext}</strong> is automatically loaded below. You can also temporarily attach an image to generate questions from.</p>
+                           
+                           <textarea 
+                             className="w-full h-32 p-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none resize-none mb-3 bg-white"
+                             placeholder={`Saved context for ${quizSubjectContext}...`}
+                             value={subjectContexts[quizSubjectContext] || ''}
+                             onChange={(e) => setSubjectContexts({...subjectContexts, [quizSubjectContext]: e.target.value})}
+                             onBlur={() => persistData(profile, performanceHistory, activityLog, subjectContexts)}
+                           />
+
+                           <div className="flex items-center gap-2 mb-3">
+                             <label className="flex-1 cursor-pointer bg-white border border-slate-300 hover:bg-slate-100 text-center py-2.5 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-sm">
+                               <ImageIcon className="w-4 h-4 text-indigo-500"/> Attach Image / File
+                               <input type="file" className="hidden" accept="image/*,.txt,.csv" onChange={(e) => handleContextFileUpload(e, 'quizMedia', quizSubjectContext)} />
+                             </label>
+                           </div>
+
+                           {/* Upload Confirmations */}
+                           {quizMedia && (
+                             <div className="bg-green-50 text-green-700 text-xs p-2 rounded border border-green-200 mb-2 flex justify-between items-center">
+                               <span>🖼️ Temporary Image Attached: {quizMedia.name}</span>
+                               <button onClick={() => setQuizMedia(null)} className="font-bold hover:text-green-900">&times;</button>
+                             </div>
+                           )}
+                           {quizTextContext && (
+                             <div className="bg-green-50 text-green-700 text-xs p-2 rounded border border-green-200 mb-2 flex justify-between items-center">
+                               <span>📄 Text Context Attached</span>
+                               <button onClick={() => setQuizTextContext('')} className="font-bold hover:text-green-900">&times;</button>
+                             </div>
+                           )}
+
+                           <hr className="my-3 border-slate-200" />
+                           <label className="block text-sm font-bold text-slate-700 mb-3">Generate questions based on:</label>
+                           <div className="space-y-2">
+                            <label className="flex items-center gap-3 cursor-pointer">
+                              <input 
+                                type="radio" 
+                                name="quizSource" 
+                                value="course" 
+                                checked={quizSource === 'course'} 
+                                onChange={(e) => setQuizSource(e.target.value)}
+                                className="w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
+                              />
+                              <span className="text-slate-700">General Course Content</span>
+                            </label>
+                            <label className="flex items-center gap-3 cursor-pointer">
+                              <input 
+                                type="radio" 
+                                name="quizSource" 
+                                value="past_papers" 
+                                checked={quizSource === 'past_papers'} 
+                                onChange={(e) => setQuizSource(e.target.value)}
+                                className="w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
+                              />
+                              <span className="text-slate-700">Leaving Cert Past Papers Style</span>
+                            </label>
+                          </div>
+                        </div>
+
+                        <button 
+                          onClick={handleGenerateQuiz}
+                          disabled={loading || (!quizTopic.trim() && !quizMedia && !(subjectContexts[quizSubjectContext] || '').trim())}
+                          className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white py-4 rounded-xl font-bold text-lg shadow-md transition-all flex items-center justify-center gap-2"
+                        >
+                          {loading ? 'Generating...' : 'Start Quiz'} <Star className="w-5 h-5"/>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {activeQuiz && !quizResults && (
+                    <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+                      <div className="flex justify-between items-center mb-6 border-b border-slate-100 pb-4">
+                        <div>
+                          <h2 className="text-2xl font-bold">{quizSubjectContext}: {quizTopic || "Custom Content"}</h2>
+                          <p className="text-sm text-slate-500 mt-1">Source: {quizSource === 'past_papers' ? 'Past Papers Style' : 'Course Content'}</p>
+                        </div>
+                        <span className="bg-indigo-100 text-indigo-800 text-sm font-bold px-3 py-1 rounded-full">{profile.subjectLevels[quizSubjectContext] || 'Higher'} Level</span>
+                      </div>
+                      
+                      <div className="space-y-8">
+                        {activeQuiz.map((q, idx) => (
+                          <div key={q.id} className="bg-slate-50 p-6 rounded-xl border border-slate-100">
+                            <p className="font-bold text-lg mb-4 text-slate-800"><span className="text-indigo-600 mr-2">Q{idx + 1}.</span> {q.questionText}</p>
+                            <textarea
+                              className="w-full h-32 p-4 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none resize-none"
+                              placeholder="Type your detailed answer here..."
+                              value={quizAnswers[q.id] || ''}
+                              onChange={(e) => setQuizAnswers({...quizAnswers, [q.id]: e.target.value})}
+                            ></textarea>
+                            {q.hint && (
+                              <div className="mt-2 text-sm text-amber-600 flex items-center gap-1">
+                                <AlertCircle className="w-4 h-4"/> Hint: {q.hint}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="mt-8 flex justify-end">
+                        <button 
+                          onClick={submitQuiz}
+                          disabled={loading}
+                          className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-xl font-bold shadow-md transition-all flex items-center gap-2"
+                        >
+                          {loading ? 'Grading...' : 'Submit Answers'} <CheckCircle className="w-5 h-5"/>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {quizResults && (
+                    <div className="space-y-6">
+                      <div className="bg-indigo-600 rounded-2xl shadow-lg p-8 text-white text-center relative overflow-hidden">
+                        <div className="absolute top-0 right-0 p-8 opacity-10"><Trophy className="w-48 h-48"/></div>
+                        <h2 className="text-3xl font-bold mb-2 relative z-10">Quiz Complete!</h2>
+                        <div className="text-6xl font-black text-yellow-400 my-6 relative z-10">{quizResults.overallScore}%</div>
+                        <p className="text-lg text-indigo-100 relative z-10">{quizResults.feedback}</p>
+                        <p className="mt-4 inline-block bg-yellow-400 text-yellow-900 font-bold px-4 py-2 rounded-full relative z-10">
+                          + {50 + Math.floor(quizResults.overallScore / 2)} XP Earned!
+                        </p>
+                      </div>
+
+                      {/* --- TUTOR FEEDBACK BUTTON --- */}
+                      <button 
+                        onClick={handleReviewWithTutor}
+                        disabled={loading}
+                        className="w-full bg-white border-2 border-indigo-600 hover:bg-indigo-50 text-indigo-800 py-4 rounded-xl font-bold transition-all shadow-sm flex items-center justify-center gap-2"
+                      >
+                        <MessageSquare className="w-6 h-6"/> Ask Tutor for Revision Strategy based on this Quiz
+                      </button>
+
+                      <div className="space-y-6">
+                        {quizResults.questionGrades?.map((grade, idx) => {
+                          const question = activeQuiz.find(q => q.id === grade.id);
+                          const isPerfect = grade.score >= 9; 
+                          return (
+                            <div key={idx} className={`bg-white rounded-xl shadow-sm border p-6 ${isPerfect ? 'border-green-200' : 'border-slate-200'}`}>
+                              <div className="flex justify-between items-start mb-4">
+                                <p className="font-bold text-slate-800 flex-1"><span className="text-indigo-600 mr-2">Q.</span> {question?.questionText}</p>
+                                <div className={`text-xl font-black px-4 py-2 rounded-lg ml-4 ${isPerfect ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-700'}`}>
+                                  {grade.score}/10
+                                </div>
+                              </div>
+                              <div className="bg-slate-50 p-4 rounded-lg mb-4 border border-slate-100">
+                                <p className="text-sm text-slate-500 mb-1">Your Answer:</p>
+                                <p className="text-slate-700">{quizAnswers[grade.id] || "No answer provided"}</p>
+                              </div>
+                              <div className="bg-indigo-50 text-indigo-900 p-4 rounded-lg flex items-start gap-3">
+                                <Brain className="w-5 h-5 mt-0.5 flex-shrink-0 text-indigo-600" />
+                                <p>{grade.correction}</p>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      <button 
+                        onClick={() => {setActiveQuiz(null); setQuizResults(null); setActiveTab('syllabus');}}
+                        className="w-full bg-slate-200 hover:bg-slate-300 text-slate-800 py-4 rounded-xl font-bold transition-all"
+                      >
+                        Back to Syllabus
+                      </button>
+                    </div>
+                  )}
+
+                </div>
+              )}
+            </main>
+          </div>
+        );
+      }
+
+      function NavButton({ icon, label, active, onClick }) {
+        return (
+          <button 
+            onClick={onClick}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+              active 
+                ? 'bg-indigo-600 text-white shadow-md' 
+                : 'text-indigo-200 hover:bg-indigo-800/50 hover:text-white'
+            }`}
+          >
+            {React.cloneElement(icon, { className: "w-5 h-5 shrink-0" })}
+            <span className="font-medium text-left">{label}</span>
+          </button>
+        );
+      }
+
+      function StatCard({ icon, title, value, subtitle }) {
+        return (
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex items-center gap-4">
+            <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 shrink-0">
+              {icon}
+            </div>
+            <div className="overflow-hidden">
+              <p className="text-sm font-medium text-slate-500 truncate">{title}</p>
+              <p className="text-2xl font-black text-slate-800">{value}</p>
+              <p className="text-xs text-slate-400 mt-1 truncate">{subtitle}</p>
+            </div>
+          </div>
+        );
+      }
+
+      function InputField({ label, value, onChange, placeholder }) {
+        return (
+          <div>
+            <label className="block text-sm font-bold text-slate-700 mb-2">{label}</label>
+            <input 
+              type="text" 
+              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all text-slate-800"
+              value={value} 
+              onChange={onChange} 
+              placeholder={placeholder}
+            />
+          </div>
+        );
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<App />);
+
+    </script>
+  </body>
+</html>
