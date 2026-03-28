@@ -37,11 +37,17 @@
       const Users = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>;
       const KeyIcon = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4l-4 4Z"/><path d="m2 22 8.5-8.5"/><circle cx="8" cy="14" r="3"/><line x1="12" x2="16" y1="18" y2="14"/></svg>;
 
-      // --- SECURE LOCAL API KEY MANAGEMENT ---
-      const getApiKey = () => localStorage.getItem('GEMINI_API_KEY') || "";
-      const setApiKey = (key) => localStorage.setItem('GEMINI_API_KEY', key);
+      // --- SECURE LOCAL API KEY MANAGEMENT WITH AUTO-TRIM ---
+      const getApiKey = () => {
+        const key = localStorage.getItem('GEMINI_API_KEY') || "";
+        return key.replace(/[\s"']/g, ''); // Aggressively removes spaces, newlines, and quotes
+      };
+      
+      const setApiKey = (key) => {
+        localStorage.setItem('GEMINI_API_KEY', key.replace(/[\s"']/g, ''));
+      };
 
-      // --- Mock google.script.run for local Canvas or GitHub Pages preview ---
+      // --- Mock google.script.run for GitHub Pages ---
       if (typeof window.google === 'undefined') {
         window.google = {
           script: {
@@ -87,8 +93,12 @@
 
       const callGeminiAPI = async (prompt, systemInstruction, schema = null, mediaData = null, model = 'gemini-2.5-flash') => {
         const apiKey = getApiKey();
+        
         if (!apiKey) {
            throw new Error("API Key Missing: Please enter your Gemini API key in the Profile tab.");
+        }
+        if (!apiKey.startsWith("AIza")) {
+           throw new Error("Invalid API Key Format: Your key should start with 'AIza'. Please check the Profile tab and remove any extra text.");
         }
         
         const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
@@ -221,7 +231,6 @@
         const [error, setError] = useState(null);
         const [dataLoaded, setDataLoaded] = useState(false);
         const [inIframe, setInIframe] = useState(false);
-        const [showMicInstructions, setShowMicInstructions] = useState(false);
 
         // Security State
         const [storedApiKey, setStoredApiKey] = useState(getApiKey());
@@ -235,7 +244,7 @@
           xp: 0
         });
 
-        // Global Context States (Saved to Google Account per subject)
+        // Global Context States
         const [subjectContexts, setSubjectContexts] = useState({});
         const [activeFocusTopic, setActiveFocusTopic] = useState(''); 
 
@@ -267,7 +276,6 @@
         const [performanceHistory, setPerformanceHistory] = useState([]);
         const [activityLog, setActivityLog] = useState([]);
 
-        // Detect Iframe for Voice Safety
         useEffect(() => {
           try {
             setInIframe(window.self !== window.top);
@@ -417,7 +425,6 @@
 
           if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
              setError("Microphone API blocked by browser security (ensure you are using https).");
-             setShowMicInstructions(true);
              return;
           }
 
@@ -447,7 +454,6 @@
           } catch (err) {
              console.error(err);
              setError("Microphone blocked. Check your browser permissions.");
-             setShowMicInstructions(true);
           }
         };
 
@@ -465,6 +471,10 @@
           const currentApiKey = getApiKey();
           if (!currentApiKey) {
              setError("API Key Missing: Please enter your Gemini API key in the Profile Setup tab to use Live Discussion.");
+             return;
+          }
+          if (!currentApiKey.startsWith("AIza")) {
+             setError("Invalid API Key: Your key must start with 'AIza'. Please check the Profile tab.");
              return;
           }
 
@@ -493,7 +503,7 @@
 
           const startRestDiscussion = async () => {
             try {
-              const response = await callGeminiAPI(initialContext, systemPrompt);
+              const response = await callGeminiAPI(initialContext, systemPrompt); // Defaults to gemini-2.5-flash
               setHwChat([{ role: 'tutor', content: response }]);
               speakText(response);
               setLiveStatus('rest');
@@ -526,7 +536,7 @@
             ws.onopen = () => {
               ws.send(JSON.stringify({
                 setup: {
-                  model: "models/gemini-2.0-flash-exp", 
+                  model: "models/gemini-2.5-flash", // Stable Flash model natively supports Bidi Live
                   systemInstruction: { parts: [{ text: systemPrompt }] }
                 }
               }));
@@ -595,7 +605,7 @@
                 setLiveStatus('none');
                 setLoading(false);
                 if (!e.wasClean || e.code !== 1000) {
-                   setError(`Live Session Disconnected.`);
+                   setError(`Live Session Disconnected. (Error Code: ${e.code})`);
                 }
               }
             };
@@ -694,7 +704,7 @@
           const mediaObj = { mimeType: mimeType, data: base64Audio };
 
           try {
-            const response = await callGeminiAPI(prompt, systemPrompt, null, mediaObj);
+            const response = await callGeminiAPI(prompt, systemPrompt, null, mediaObj); 
             setHwChat([...newChat, { role: 'tutor', content: response }]);
             if (isDiscussionMode) speakText(response);
             
@@ -758,7 +768,7 @@
           }
 
           try {
-            const response = await callGeminiAPI(prompt, systemPrompt);
+            const response = await callGeminiAPI(prompt, systemPrompt); 
             setHwChat([...newChat, { role: 'tutor', content: response }]);
             if (isDiscussionMode) speakText(response);
             
@@ -812,7 +822,7 @@
           };
 
           try {
-            // Using Gemini 2.5 Pro for complex quiz generation
+            // Re-enabled Gemini 2.5 Pro for generation logic
             const generated = await callGeminiAPI(prompt, systemPrompt, schema, quizMedia, 'gemini-2.5-pro');
             setActiveQuiz(generated.questions);
             setQuizMedia(null);
@@ -854,7 +864,7 @@
           };
 
           try {
-            // Using Gemini 2.5 Pro for strict, accurate grading logic
+            // Re-enabled Gemini 2.5 Pro for Grading
             const results = await callGeminiAPI(prompt, systemPrompt, schema, null, 'gemini-2.5-pro');
             setQuizResults(results);
             
@@ -901,7 +911,7 @@
           const prompt = `Student Message: ${initialMsg}`;
 
           try {
-            // Using Gemini 2.5 Pro for analytical feedback and revision planning
+            // Re-enabled Gemini 2.5 Pro for revision strategy
             const response = await callGeminiAPI(prompt, systemPrompt, null, null, 'gemini-2.5-pro');
             setHwChat([...newChat, { role: 'tutor', content: response }]);
             const newLog = logActivity("Tutor Review", quizSubjectContext, `Requested revision strategy for ${quizTopic}`, "Completed");
@@ -922,33 +932,8 @@
 
         return (
           <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row font-sans text-slate-800">
-            {inIframe && (
-               <div className="absolute top-0 left-0 right-0 bg-indigo-600 text-white p-2 text-center text-sm z-50 flex justify-center items-center gap-4">
-                  <span>🎙️ Voice input is blocked by Google Apps Script security, but text chatting works perfectly!</span>
-                  <button onClick={() => setShowMicInstructions(true)} className="bg-white text-indigo-700 px-3 py-1 rounded font-bold flex items-center gap-1 hover:bg-indigo-50">
-                    Learn More <ExternalLink className="w-4 h-4"/>
-                  </button>
-               </div>
-            )}
-
-            {showMicInstructions && (
-               <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
-                 <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-xl relative">
-                   <button onClick={() => setShowMicInstructions(false)} className="absolute top-4 right-4 text-slate-400 hover:text-slate-800">
-                     &times;
-                   </button>
-                   <h3 className="text-xl font-bold mb-4 flex items-center gap-2"><Mic className="text-indigo-600"/> Voice Input Restricted</h3>
-                   <p className="text-slate-600 mb-4">Because of strict browser security rules, Google Apps Script permanently blocks microphone access inside all of its Web Apps.</p>
-                   <div className="bg-green-50 border border-green-200 p-3 rounded-lg mb-4">
-                     <p className="text-green-800 text-sm font-bold mb-1">Text Chat Works Perfectly!</p>
-                     <p className="text-green-700 text-sm">You don't need a microphone to use the Live Discussion mode. Just type your responses into the chat box!</p>
-                   </div>
-                   <button onClick={() => setShowMicInstructions(false)} className="w-full bg-indigo-600 text-white py-3 rounded-xl font-bold hover:bg-indigo-700">Got it, I'll type!</button>
-                 </div>
-               </div>
-            )}
             
-            <nav className={`w-full md:w-64 bg-indigo-900 text-white flex flex-col md:min-h-screen shadow-xl z-10 shrink-0 ${inIframe ? 'mt-10' : ''}`}>
+            <nav className={`w-full md:w-64 bg-indigo-900 text-white flex flex-col md:min-h-screen shadow-xl z-10 shrink-0`}>
               <div className="p-6 flex items-center gap-3 border-b border-indigo-800">
                 <Award className="w-8 h-8 text-yellow-400" />
                 <h1 className="text-xl font-bold tracking-tight">LC Study Hub</h1>
@@ -977,7 +962,7 @@
               </div>
             </nav>
 
-            <main className={`flex-1 overflow-y-auto p-4 md:p-8 relative ${inIframe ? 'mt-10' : ''}`}>
+            <main className={`flex-1 overflow-y-auto p-4 md:p-8 relative`}>
               
               {!storedApiKey && (
                 <div className="mb-6 p-4 bg-amber-100 border-l-4 border-amber-500 text-amber-800 flex items-center justify-between rounded-lg shadow-sm">
@@ -1143,8 +1128,9 @@
                       label="Gemini API Key" 
                       value={storedApiKey} 
                       onChange={(e) => {
-                        setStoredApiKey(e.target.value);
-                        setApiKey(e.target.value);
+                        const cleanKey = e.target.value.replace(/[\s"']/g, ''); // Instantly clean spaces
+                        setStoredApiKey(cleanKey);
+                        setApiKey(cleanKey);
                       }} 
                       placeholder="AIzaSy..." 
                       type="password"
