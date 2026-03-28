@@ -512,7 +512,7 @@
 
           const startRestDiscussion = async () => {
             try {
-              const response = await callGeminiAPI(initialContext, systemPrompt); 
+              const response = await callGeminiAPI(initialContext, systemPrompt, null, null, 'gemini-3-flash'); 
               setHwChat([{ role: 'tutor', content: response }]);
               speakText(response);
               setLiveStatus('rest');
@@ -545,7 +545,7 @@
             ws.onopen = () => {
               ws.send(JSON.stringify({
                 setup: {
-                  model: "models/gemini-2.5-flash", 
+                  model: "models/gemini-3-flash-live", 
                   systemInstruction: { parts: [{ text: systemPrompt }] }
                 }
               }));
@@ -713,7 +713,8 @@
           const mediaObj = { mimeType: mimeType, data: base64Audio };
 
           try {
-            const response = await callGeminiAPI(prompt, systemPrompt, null, mediaObj); 
+            const targetModel = isDiscussionMode ? 'gemini-3-flash' : 'gemini-2.5-flash';
+            const response = await callGeminiAPI(prompt, systemPrompt, null, mediaObj, targetModel); 
             setHwChat([...newChat, { role: 'tutor', content: response }]);
             if (isDiscussionMode) speakText(response);
             
@@ -777,7 +778,8 @@
           }
 
           try {
-            const response = await callGeminiAPI(prompt, systemPrompt); 
+            const targetModel = isDiscussionMode ? 'gemini-3-flash' : 'gemini-2.5-flash';
+            const response = await callGeminiAPI(prompt, systemPrompt, null, null, targetModel); 
             setHwChat([...newChat, { role: 'tutor', content: response }]);
             if (isDiscussionMode) speakText(response);
             
