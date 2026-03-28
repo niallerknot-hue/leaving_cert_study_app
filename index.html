@@ -805,7 +805,8 @@
           };
 
           try {
-            const generated = await callGeminiAPI(prompt, systemPrompt, schema, quizMedia);
+            // UPGRADE: Route to Gemini 2.5 Pro for complex syllabus-aligned question generation
+            const generated = await callGeminiAPI(prompt, systemPrompt, schema, quizMedia, 'gemini-2.5-pro');
             setActiveQuiz(generated.questions);
             setQuizMedia(null);
           } catch (err) {
@@ -846,7 +847,8 @@
           };
 
           try {
-            const results = await callGeminiAPI(prompt, systemPrompt, schema);
+            // UPGRADE: Route to Gemini 2.5 Pro for strict, accurate grading logic
+            const results = await callGeminiAPI(prompt, systemPrompt, schema, null, 'gemini-2.5-pro');
             setQuizResults(results);
             
             const newScoreEntry = {
@@ -892,7 +894,8 @@
           const prompt = `Student Message: ${initialMsg}`;
 
           try {
-            const response = await callGeminiAPI(prompt, systemPrompt);
+            // UPGRADE: Route to Gemini 2.5 Pro for deep analytical feedback and revision planning
+            const response = await callGeminiAPI(prompt, systemPrompt, null, null, 'gemini-2.5-pro');
             setHwChat([...newChat, { role: 'tutor', content: response }]);
             const newLog = logActivity("Tutor Review", quizSubjectContext, `Requested revision strategy for ${quizTopic}`, "Completed");
             persistData(profile, performanceHistory, newLog);
