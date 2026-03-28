@@ -512,7 +512,7 @@
 
           const startRestDiscussion = async () => {
             try {
-              const response = await callGeminiAPI(initialContext, systemPrompt, null, null, 'gemini-3-flash'); 
+              const response = await callGeminiAPI(initialContext, systemPrompt, null, null, 'gemini-2.5-flash'); 
               setHwChat([{ role: 'tutor', content: response }]);
               speakText(response);
               setLiveStatus('rest');
@@ -545,7 +545,7 @@
             ws.onopen = () => {
               ws.send(JSON.stringify({
                 setup: {
-                  model: "models/gemini-3-flash-live", 
+                  model: "models/gemini-2.0-flash-exp", 
                   systemInstruction: { parts: [{ text: systemPrompt }] }
                 }
               }));
@@ -713,7 +713,7 @@
           const mediaObj = { mimeType: mimeType, data: base64Audio };
 
           try {
-            const targetModel = isDiscussionMode ? 'gemini-3-flash' : 'gemini-2.5-flash';
+            const targetModel = 'gemini-2.5-flash';
             const response = await callGeminiAPI(prompt, systemPrompt, null, mediaObj, targetModel); 
             setHwChat([...newChat, { role: 'tutor', content: response }]);
             if (isDiscussionMode) speakText(response);
@@ -778,7 +778,7 @@
           }
 
           try {
-            const targetModel = isDiscussionMode ? 'gemini-3-flash' : 'gemini-2.5-flash';
+            const targetModel = 'gemini-2.5-flash';
             const response = await callGeminiAPI(prompt, systemPrompt, null, null, targetModel); 
             setHwChat([...newChat, { role: 'tutor', content: response }]);
             if (isDiscussionMode) speakText(response);
@@ -833,6 +833,7 @@
           };
 
           try {
+            // Using Gemini 2.5 Pro for advanced quiz generation
             const generated = await callGeminiAPI(prompt, systemPrompt, schema, quizMedia, 'gemini-2.5-pro');
             if (generated && Array.isArray(generated.questions)) {
               setActiveQuiz(generated.questions);
@@ -878,6 +879,7 @@
           };
 
           try {
+            // Using Gemini 2.5 Pro for Grading
             const results = await callGeminiAPI(prompt, systemPrompt, schema, null, 'gemini-2.5-pro');
             setQuizResults(results);
             
@@ -924,6 +926,7 @@
           const prompt = `Student Message: ${initialMsg}`;
 
           try {
+            // Using Gemini 2.5 Pro for revision strategy
             const response = await callGeminiAPI(prompt, systemPrompt, null, null, 'gemini-2.5-pro');
             setHwChat([...newChat, { role: 'tutor', content: response }]);
             const newLog = logActivity("Tutor Review", quizSubjectContext, `Requested revision strategy for ${quizTopic}`, "Completed");
