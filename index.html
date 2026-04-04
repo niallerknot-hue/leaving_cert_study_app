@@ -99,29 +99,29 @@
 
       const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-      const callGeminiAPI = async (prompt, systemInstruction, schema = null, mediaData = null, model = 'gemini-2.5-flash') => {
+      // UPDATED API Call function to support arrays of mixed text/image parts
+      const callGeminiAPI = async (promptOrParts, systemInstruction, schema = null, mediaData = null, model = 'gemini-2.5-flash') => {
         const userApiKey = getApiKey();
         
-        if (!userApiKey) {
-           throw new Error("API Key Missing: Please enter your Gemini API key in the Profile tab, or add it to the code.");
-        }
-        if (!userApiKey.startsWith("AIza")) {
-           throw new Error("Invalid API Key Format: Your key should start with 'AIza'.");
-        }
+        if (!userApiKey) throw new Error("API Key Missing: Please enter your Gemini API key in the Profile tab.");
+        if (!userApiKey.startsWith("AIza")) throw new Error("Invalid API Key Format: Your key should start with 'AIza'.");
         
         const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${userApiKey}`;
         
-        const parts = [];
-        if (prompt) parts.push({ text: prompt });
+        let finalParts = [];
+        if (Array.isArray(promptOrParts)) {
+           finalParts = promptOrParts;
+        } else if (promptOrParts) {
+           finalParts.push({ text: promptOrParts });
+        }
         
+        // Legacy support for single mediaData objects
         if (mediaData) {
-          parts.push({
-            inlineData: { mimeType: mediaData.mimeType, data: mediaData.data }
-          });
+          finalParts.push({ inlineData: { mimeType: mediaData.mimeType, data: mediaData.data } });
         }
 
         const payload = {
-          contents: [{ parts: parts }],
+          contents: [{ parts: finalParts }],
           systemInstruction: { parts: [{ text: systemInstruction }] }
         };
 
@@ -280,6 +280,8 @@
 
         const [activeQuiz, setActiveQuiz] = useState(null);
         const [quizAnswers, setQuizAnswers] = useState({});
+        // NEW: Store images per question id
+        const [quizAnswerImages, setQuizAnswerImages] = useState({}); 
         const [quizResults, setQuizResults] = useState(null);
         
         const [performanceHistory, setPerformanceHistory] = useState([]);
@@ -684,6 +686,25 @@
           }
         };
 
+        // NEW: Handle image uploads for individual quiz answers
+        const handleAnswerImageUpload = (e, qId) => {
+          const file = e.target.files[0];
+          if (!file) return;
+          if (!file.type.startsWith('image/')) {
+             setError("Please upload a valid image file (PNG, JPG) for your diagram.");
+             return;
+          }
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            const base64 = event.target.result.split(',')[1];
+            setQuizAnswerImages(prev => ({
+               ...prev,
+               [qId]: { mimeType: file.type, data: base64, name: file.name }
+            }));
+          };
+          reader.readAsDataURL(file);
+        };
+
         const handleAskHomeworkAudio = async (base64Audio, mimeType) => {
           const newChat = [...hwChat, { role: 'user', content: '🎤 [Voice Message Sent]' }];
           setHwChat(newChat);
@@ -802,6 +823,7 @@
           setActiveQuiz(null);
           setQuizResults(null);
           setQuizAnswers({});
+          setQuizAnswerImages({}); // Clear past images
 
           const currentQuizLevel = (profile.subjectLevels && profile.subjectLevels[quizSubjectContext]) || 'Higher';
           const systemPrompt = `You are an expert Irish Leaving Certificate examiner for ${quizSubjectContext} (${currentQuizLevel} level).`;
@@ -813,7 +835,12 @@
           const topicInstruction = quizTopic ? `Topic: "${quizTopic}"` : "Create questions based on the provided uploaded file/image/saved context content.";
           const contextInstruction = hasContext ? `\nUse this context material provided by the student:\n${hasContext}` : "";
 
-          const prompt = `Generate 3 distinct, exam-standard short-answer questions.\n${topicInstruction}\n${sourceInstruction}${contextInstruction}\nEnsure the questions match the difficulty of the ${currentQuizLevel} level.`;
+          // Updated prompt to encourage diverse question types and image uploads
+          const prompt = `Generate 3 distinct, exam-standard questions.\n${topicInstruction}\n${sourceInstruction}${contextInstruction}
+          Ensure the questions match the difficulty of the ${currentQuizLevel} level.
+          FORMAT REQUIREMENT: Include a diverse mix of question formats (e.g. Short Answer, Multiple Choice, Diagram/Graph sketching).
+          IMPORTANT: If a question requires drawing a graph or diagram, explicitly add this sentence to the end of the questionText: '(Please draw your answer on paper and use the Attach Diagram button below to upload a photo of your work.)'.
+          If a question is Multiple Choice, clearly list the options A, B, C, D in the questionText.`;
 
           const schema = {
             type: "OBJECT",
@@ -854,24 +881,37 @@
 
           const currentQuizLevel = (profile.subjectLevels && profile.subjectLevels[quizSubjectContext]) || 'Higher';
           const systemPrompt = `You are a strict but fair Irish Leaving Certificate examiner for ${quizSubjectContext} (${currentQuizLevel} level). 
-          Grade the student's short answers accurately according to the standard marking scheme. Provide constructive, encouraging feedback highlighting exactly what syllabus areas need work.`;
+          Grade the student's answers accurately according to the standard marking scheme. Provide constructive, encouraging feedback highlighting exactly what syllabus areas need work.`;
           
-          const prompt = `Topic: ${quizTopic || 'Uploaded Content'}\n\nHere are the questions and the student's answers:\n` + 
-            (activeQuiz || []).map(q => `Q (${q.id}): ${q.questionText}\nStudent Answer: ${quizAnswers[q.id] || "No answer provided"}`).join('\n\n');
+          // Build an array of parts to interleave text and images
+          const parts = [];
+          parts.push({ text: `Topic: ${quizTopic || 'Uploaded Content'}\n\nHere are the exam questions and the student's submitted answers. Please grade them thoroughly.` });
+
+          (activeQuiz || []).forEach(q => {
+             parts.push({ text: `\n\n--- QUESTION ID: ${q.id} ---\nQuestion Text: ${q.questionText}\nStudent Text Answer: ${quizAnswers[q.id] || "No text provided"}\n` });
+             
+             if (quizAnswerImages[q.id]) {
+                parts.push({ text: `[Student also uploaded the following image diagram/working for Question ${q.id}:]` });
+                parts.push({ inlineData: { mimeType: quizAnswerImages[q.id].mimeType, data: quizAnswerImages[q.id].data } });
+             }
+          });
+
+          // Strict validation prompt to prevent dropped questions
+          parts.push({ text: `\n\nCRITICAL INSTRUCTION: You MUST return a grading object in the 'questionGrades' array for EVERY SINGLE QUESTION ID listed above. I submitted exactly ${activeQuiz.length} questions. You MUST evaluate all ${activeQuiz.length} questions and return exactly ${activeQuiz.length} grades in the array. DO NOT SKIP ANY.` });
 
           const schema = {
             type: "OBJECT",
             properties: {
-              overallScore: { type: "NUMBER", description: "Score out of 100" },
+              overallScore: { type: "NUMBER", description: "Overall score percentage out of 100" },
               feedback: { type: "STRING", description: "General feedback on the performance and what syllabus areas to revise" },
               questionGrades: {
                 type: "ARRAY",
                 items: {
                   type: "OBJECT",
                   properties: {
-                    id: { type: "STRING" },
-                    score: { type: "NUMBER", description: "Score out of 10 for this question" },
-                    correction: { type: "STRING", description: "How to improve or what was right/wrong" }
+                    id: { type: "STRING", description: "Must exactly match the QUESTION ID provided" },
+                    score: { type: "NUMBER", description: "Score out of 10 for this specific question" },
+                    correction: { type: "STRING", description: "Detailed explanation of what was right/wrong and how to improve" }
                   }
                 }
               }
@@ -879,8 +919,8 @@
           };
 
           try {
-            // Using Gemini 2.5 Pro for Grading
-            const results = await callGeminiAPI(prompt, systemPrompt, schema, null, 'gemini-2.5-pro');
+            // Send the interleaved parts to Gemini 2.5 Pro
+            const results = await callGeminiAPI(parts, systemPrompt, schema, null, 'gemini-2.5-pro');
             setQuizResults(results);
             
             const newScoreEntry = {
@@ -1497,7 +1537,7 @@
                       
                       <div className="space-y-8">
                         {activeQuiz?.map((q, idx) => (
-                          <div key={q.id} className="bg-slate-50 p-6 rounded-xl border border-slate-100">
+                          <div key={q.id} className="bg-slate-50 p-6 rounded-xl border border-slate-100 shadow-inner">
                             <p className="font-bold text-lg mb-4 text-slate-800"><span className="text-indigo-600 mr-2">Q{idx + 1}.</span> {q.questionText}</p>
                             <textarea
                               className="w-full h-32 p-4 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none resize-none"
@@ -1505,8 +1545,23 @@
                               value={quizAnswers[q.id] || ''}
                               onChange={(e) => setQuizAnswers({...quizAnswers, [q.id]: e.target.value})}
                             ></textarea>
+                            
+                            {/* PER-QUESTION IMAGE UPLOAD */}
+                            <div className="mt-3 flex items-center gap-4">
+                               <label className="cursor-pointer bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 shadow-sm">
+                                 <ImageIcon className="w-4 h-4 text-indigo-500"/> 
+                                 {quizAnswerImages[q.id] ? "Change Diagram" : "Attach Diagram/Working"}
+                                 <input type="file" className="hidden" accept="image/*" onChange={(e) => handleAnswerImageUpload(e, q.id)} />
+                               </label>
+                               {quizAnswerImages[q.id] && (
+                                 <span className="text-xs text-green-700 flex items-center gap-1 font-bold bg-green-50 border border-green-200 px-2 py-1 rounded">
+                                   <CheckCircle className="w-4 h-4"/> Attached: {quizAnswerImages[q.id].name}
+                                 </span>
+                               )}
+                            </div>
+
                             {q.hint && (
-                              <div className="mt-2 text-sm text-amber-600 flex items-center gap-1">
+                              <div className="mt-4 text-sm text-amber-600 flex items-center gap-1 border-t border-slate-200 pt-3">
                                 <AlertCircle className="w-4 h-4"/> Hint: {q.hint}
                               </div>
                             )}
@@ -1548,20 +1603,39 @@
                       </button>
 
                       <div className="space-y-6">
-                        {quizResults.questionGrades?.map((grade, idx) => {
-                          const question = activeQuiz?.find(q => q.id === grade.id);
+                        {activeQuiz?.map((question, idx) => {
+                          const grade = quizResults.questionGrades?.find(g => g.id === question.id);
+                          
+                          // Graceful fallback if the AI skipped grading this question
+                          if (!grade) {
+                             return (
+                               <div key={idx} className="bg-red-50 rounded-xl shadow-sm border border-red-200 p-6">
+                                 <p className="font-bold text-red-800"><span className="mr-2">Q.</span> {question.questionText}</p>
+                                 <div className="mt-3 flex items-start gap-2 text-red-600">
+                                    <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                                    <p className="text-sm">The examiner AI failed to return a grade for this specific question. Ask the Socratic Tutor to review your answer instead!</p>
+                                 </div>
+                               </div>
+                             );
+                          }
+
                           const isPerfect = grade.score >= 9; 
                           return (
                             <div key={idx} className={`bg-white rounded-xl shadow-sm border p-6 ${isPerfect ? 'border-green-200' : 'border-slate-200'}`}>
                               <div className="flex justify-between items-start mb-4">
-                                <p className="font-bold text-slate-800 flex-1"><span className="text-indigo-600 mr-2">Q.</span> {question?.questionText}</p>
+                                <p className="font-bold text-slate-800 flex-1"><span className="text-indigo-600 mr-2">Q.</span> {question.questionText}</p>
                                 <div className={`text-xl font-black px-4 py-2 rounded-lg ml-4 ${isPerfect ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-700'}`}>
                                   {grade.score}/10
                                 </div>
                               </div>
                               <div className="bg-slate-50 p-4 rounded-lg mb-4 border border-slate-100">
                                 <p className="text-sm text-slate-500 mb-1">Your Answer:</p>
-                                <p className="text-slate-700">{quizAnswers[grade.id] || "No answer provided"}</p>
+                                {quizAnswerImages[question.id] && (
+                                   <div className="mb-3 px-3 py-2 bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs rounded-md font-bold flex items-center gap-2 inline-flex">
+                                     <ImageIcon className="w-4 h-4"/> 1 Image Diagram Submitted
+                                   </div>
+                                )}
+                                <p className="text-slate-700">{quizAnswers[question.id] || (quizAnswerImages[question.id] ? "[Image only answer]" : "No answer provided")}</p>
                               </div>
                               <div className="bg-indigo-50 text-indigo-900 p-4 rounded-lg flex items-start gap-3">
                                 <Brain className="w-5 h-5 mt-0.5 flex-shrink-0 text-indigo-600" />
