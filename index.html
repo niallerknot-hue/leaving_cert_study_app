@@ -835,12 +835,33 @@
           const topicInstruction = quizTopic ? `Topic: "${quizTopic}"` : "Create questions based on the provided uploaded file/image/saved context content.";
           const contextInstruction = hasContext ? `\nUse this context material provided by the student:\n${hasContext}` : "";
 
-          // Updated prompt to encourage diverse question types and image uploads
-          const prompt = `Generate 3 distinct, exam-standard questions.\n${topicInstruction}\n${sourceInstruction}${contextInstruction}
-          Ensure the questions match the difficulty of the ${currentQuizLevel} level.
-          FORMAT REQUIREMENT: Include a diverse mix of question formats (e.g. Short Answer, Multiple Choice, Diagram/Graph sketching).
-          IMPORTANT: If a question requires drawing a graph or diagram, explicitly add this sentence to the end of the questionText: '(Please draw your answer on paper and use the Attach Diagram button below to upload a photo of your work.)'.
-          If a question is Multiple Choice, clearly list the options A, B, C, D in the questionText.`;
+          let subjectRules = "";
+          switch(quizSubjectContext) {
+            case "English":
+              subjectRules = "Use standard English exam formats: Paragraph responses, thematic analysis, or quote analysis. STRICT RULE: ABSOLUTELY NO diagrams, charts, or timelines. All answers must be entirely text-based.";
+              break;
+            case "Maths":
+              subjectRules = "Use standard Maths exam formats: Problem-solving, algebraic equations, geometry proofs, or functions/graphs. Require diagram/working uploads frequently.";
+              break;
+            case "Geography":
+            case "Biology":
+            case "Technology":
+            case "Art":
+              subjectRules = "Use standard science/applied formats: Definitions, process explanations, and labeled diagrams/sketches. You may ask for a diagram if it is a typical exam requirement for this topic.";
+              break;
+            default:
+              subjectRules = "Use standard short answer formats. Only ask for diagrams if it is a standard exam requirement.";
+          }
+
+          const prompt = `Generate 3 distinct, exam-standard questions for the subject: ${quizSubjectContext}.\n${topicInstruction}\n${sourceInstruction}${contextInstruction}
+          Ensure the questions match the exact difficulty and styling of the Irish Leaving Cert ${currentQuizLevel} level.
+          
+          SUBJECT-SPECIFIC RULES:
+          ${subjectRules}
+          
+          DIAGRAM INSTRUCTION RULE:
+          If (and ONLY if) the question naturally requires drawing a graph, mathematical working, or a scientific/technical diagram based on the subject rules above, explicitly add this EXACT sentence to the end of the questionText: '(Please draw your answer on paper and use the Attach Diagram button below to upload a photo of your work.)'.
+          NEVER add this sentence for English or purely text-based questions. Maximum 1 diagram question per quiz.`;
 
           const schema = {
             type: "OBJECT",
