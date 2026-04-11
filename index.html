@@ -14,6 +14,7 @@
     <script type="text/babel">
       const { useState, useEffect, useRef } = React;
       
+      // --- Icons ---
       const BookOpen = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>;
       const User = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>;
       const PenTool = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m12 19 7-7 3 3-7 7-3-3z"/><path d="m18 13-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="m2 2 7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>;
@@ -22,6 +23,7 @@
       const Upload = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>;
       const Trophy = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>;
       const ChevronRight = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m9 18 6-6-6-6"/></svg>;
+      const ChevronDown = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m6 9 6 6 6-6"/></svg>;
       const CheckCircle = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>;
       const AlertCircle = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>;
       const Award = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>;
@@ -36,13 +38,13 @@
       const Volume2 = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>;
       const Users = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>;
       const KeyIcon = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4l-4 4Z"/><path d="m2 22 8.5-8.5"/><circle cx="8" cy="14" r="3"/><line x1="12" x2="16" y1="18" y2="14"/></svg>;
+      const Database = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg>;
 
       // --- API KEY SETUP ---
       // Option 1: Hardcode it here (Easiest, and perfectly safe on your own GitHub account)
       const HARDCODED_API_KEY = ""; 
 
       // Option 2: Leave blank to manually enter it in the Profile Setup tab.
-      
       const getApiKey = () => {
         if (HARDCODED_API_KEY && HARDCODED_API_KEY.startsWith("AIza")) {
            return HARDCODED_API_KEY.trim();
@@ -99,7 +101,6 @@
 
       const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-      // UPDATED API Call function to support arrays of mixed text/image parts
       const callGeminiAPI = async (promptOrParts, systemInstruction, schema = null, mediaData = null, model = 'gemini-2.5-flash') => {
         const userApiKey = getApiKey();
         
@@ -115,7 +116,6 @@
            finalParts.push({ text: promptOrParts });
         }
         
-        // Legacy support for single mediaData objects
         if (mediaData) {
           finalParts.push({ inlineData: { mimeType: mediaData.mimeType, data: mediaData.data } });
         }
@@ -241,6 +241,9 @@
         const [inIframe, setInIframe] = useState(false);
         const [showMicInstructions, setShowMicInstructions] = useState(false);
 
+        // UI State
+        const [expandedSubjects, setExpandedSubjects] = useState({});
+
         // Security State
         const [storedApiKey, setStoredApiKey] = useState(getApiKey());
 
@@ -280,7 +283,6 @@
 
         const [activeQuiz, setActiveQuiz] = useState(null);
         const [quizAnswers, setQuizAnswers] = useState({});
-        // NEW: Store images per question id
         const [quizAnswerImages, setQuizAnswerImages] = useState({}); 
         const [quizResults, setQuizResults] = useState(null);
         
@@ -416,6 +418,10 @@
           return 'bg-red-50 border-red-200';
         };
 
+        const toggleSubjectExpand = (subj) => {
+          setExpandedSubjects(prev => ({...prev, [subj]: !prev[subj]}));
+        };
+
         const speakText = (text) => {
           if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel(); 
@@ -505,7 +511,7 @@
           RULE 3: Wait for their answer, evaluate it, gently correct if needed, and ask the next logical question to deepen understanding.`;
           
           const currentContext = subjectContexts && subjectContexts[hwSubjectContext];
-          let contextString = currentContext ? `Based on this context material:\n${currentContext}\n` : `Based on general ${hwSubjectContext} syllabus.\n`;
+          let contextString = currentContext ? `CRITICAL RULE: Rely strongly on this context material:\n${currentContext}\n` : `Based on general ${hwSubjectContext} syllabus.\n`;
           if (activeFocusTopic) {
             contextString += `Specific Focus Topic: ${activeFocusTopic}\n`;
           }
@@ -686,7 +692,6 @@
           }
         };
 
-        // NEW: Handle image uploads for individual quiz answers
         const handleAnswerImageUpload = (e, qId) => {
           const file = e.target.files[0];
           if (!file) return;
@@ -725,7 +730,7 @@
           }
           
           const savedContext = subjectContexts && subjectContexts[hwSubjectContext];
-          let contextString = savedContext ? `Context material from student notes/syllabus selection:\n${savedContext}\n\n` : "";
+          let contextString = savedContext ? `CRITICAL RULE: Rely strongly on this context material:\n${savedContext}\n\n` : "";
           if (activeFocusTopic) {
             contextString += `Focus Topic: ${activeFocusTopic}\n\n`;
           }
@@ -787,7 +792,7 @@
           }
           
           const savedContext = subjectContexts && subjectContexts[hwSubjectContext];
-          let contextString = savedContext ? `Context material from student notes/syllabus selection:\n${savedContext}\n\n` : "";
+          let contextString = savedContext ? `CRITICAL RULE: Rely strongly on this context material:\n${savedContext}\n\n` : "";
           if (activeFocusTopic) {
             contextString += `Focus Topic: ${activeFocusTopic}\n\n`;
           }
@@ -823,7 +828,7 @@
           setActiveQuiz(null);
           setQuizResults(null);
           setQuizAnswers({});
-          setQuizAnswerImages({}); // Clear past images
+          setQuizAnswerImages({});
 
           const currentQuizLevel = (profile.subjectLevels && profile.subjectLevels[quizSubjectContext]) || 'Higher';
           const systemPrompt = `You are an expert Irish Leaving Certificate examiner for ${quizSubjectContext} (${currentQuizLevel} level).`;
@@ -835,6 +840,7 @@
           const topicInstruction = quizTopic ? `Topic: "${quizTopic}"` : "Create questions based on the provided uploaded file/image/saved context content.";
           const contextInstruction = hasContext ? `\nUse this context material provided by the student:\n${hasContext}` : "";
 
+          // NEW: Strict formatting rules per subject to prevent English timeline diagrams
           let subjectRules = "";
           switch(quizSubjectContext) {
             case "English":
@@ -853,8 +859,11 @@
               subjectRules = "Use standard short answer formats. Only ask for diagrams if it is a standard exam requirement.";
           }
 
+          // NEW: Added Anti-Repetition Rule
           const prompt = `Generate 3 distinct, exam-standard questions for the subject: ${quizSubjectContext}.\n${topicInstruction}\n${sourceInstruction}${contextInstruction}
           Ensure the questions match the exact difficulty and styling of the Irish Leaving Cert ${currentQuizLevel} level.
+          
+          ANTI-REPETITION RULE: To prevent asking the same repetitive questions, generate highly unique, obscure, or creative questions. Approach the topic from a novel angle or specific edge-case in the syllabus. Do NOT generate basic/generic questions.
           
           SUBJECT-SPECIFIC RULES:
           ${subjectRules}
@@ -881,7 +890,6 @@
           };
 
           try {
-            // Using Gemini 2.5 Pro for advanced quiz generation
             const generated = await callGeminiAPI(prompt, systemPrompt, schema, quizMedia, 'gemini-2.5-pro');
             if (generated && Array.isArray(generated.questions)) {
               setActiveQuiz(generated.questions);
@@ -904,8 +912,13 @@
           const systemPrompt = `You are a strict but fair Irish Leaving Certificate examiner for ${quizSubjectContext} (${currentQuizLevel} level). 
           Grade the student's answers accurately according to the standard marking scheme. Provide constructive, encouraging feedback highlighting exactly what syllabus areas need work.`;
           
-          // Build an array of parts to interleave text and images
           const parts = [];
+          
+          const hasContext = ((subjectContexts && subjectContexts[quizSubjectContext]) || '').trim();
+          if (hasContext) {
+             parts.push({ text: `CRITICAL RULE: Base your grading strictly on the facts provided in this context material: \n${hasContext}\n\n` });
+          }
+          
           parts.push({ text: `Topic: ${quizTopic || 'Uploaded Content'}\n\nHere are the exam questions and the student's submitted answers. Please grade them thoroughly.` });
 
           (activeQuiz || []).forEach(q => {
@@ -917,7 +930,6 @@
              }
           });
 
-          // Strict validation prompt to prevent dropped questions
           parts.push({ text: `\n\nCRITICAL INSTRUCTION: You MUST return a grading object in the 'questionGrades' array for EVERY SINGLE QUESTION ID listed above. I submitted exactly ${activeQuiz.length} questions. You MUST evaluate all ${activeQuiz.length} questions and return exactly ${activeQuiz.length} grades in the array. DO NOT SKIP ANY.` });
 
           const schema = {
@@ -940,7 +952,6 @@
           };
 
           try {
-            // Send the interleaved parts to Gemini 2.5 Pro
             const results = await callGeminiAPI(parts, systemPrompt, schema, null, 'gemini-2.5-pro');
             setQuizResults(results);
             
@@ -987,7 +998,6 @@
           const prompt = `Student Message: ${initialMsg}`;
 
           try {
-            // Using Gemini 2.5 Pro for revision strategy
             const response = await callGeminiAPI(prompt, systemPrompt, null, null, 'gemini-2.5-pro');
             setHwChat([...newChat, { role: 'tutor', content: response }]);
             const newLog = logActivity("Tutor Review", quizSubjectContext, `Requested revision strategy for ${quizTopic}`, "Completed");
@@ -1033,6 +1043,7 @@
                 <NavButton icon={<Layers/>} label="Syllabus Heatmap" active={activeTab === 'syllabus'} onClick={() => setActiveTab('syllabus')} />
                 <NavButton icon={<PenTool/>} label="Homework Tutor" active={activeTab === 'homework'} onClick={() => setActiveTab('homework')} />
                 <NavButton icon={<Brain/>} label="Study & Quizzes" active={activeTab === 'study'} onClick={() => setActiveTab('study')} />
+                <NavButton icon={<Database/>} label="Context Bank" active={activeTab === 'context'} onClick={() => setActiveTab('context')} />
                 <NavButton icon={<ClipboardList/>} label="Activity Log" active={activeTab === 'activity'} onClick={() => setActiveTab('activity')} />
                 <NavButton icon={<User/>} label="Profile Setup" active={activeTab === 'profile'} onClick={() => setActiveTab('profile')} />
               </div>
@@ -1061,6 +1072,157 @@
                     <p>{error}</p>
                   </div>
                   <button onClick={() => setError(null)} className="font-bold hover:text-red-900">&times;</button>
+                </div>
+              )}
+
+              {/* --- VIEW: DASHBOARD --- */}
+              {activeTab === 'dashboard' && (
+                <div className="max-w-5xl mx-auto space-y-6">
+                  <header className="mb-8">
+                    <h2 className="text-3xl font-bold text-slate-800">Welcome back, {profile.name || 'Student'}!</h2>
+                    <p className="text-slate-500 mt-2">Let's crush that Leaving Cert.</p>
+                  </header>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <StatCard icon={<Trophy className="text-yellow-500" />} title="Current Level" value={currentLevel} subtitle={`${profile.xp} Total XP`} />
+                    <StatCard icon={<CheckCircle className="text-green-500" />} title="Quizzes Taken" value={performanceHistory.length} subtitle="Keep it up!" />
+                    <StatCard icon={<TrendingUp className="text-indigo-500" />} title="Avg. Score" value={
+                      performanceHistory.length > 0 
+                      ? Math.round(performanceHistory.reduce((acc, curr) => acc + curr.score, 0) / performanceHistory.length) + '%'
+                      : 'N/A'
+                    } subtitle="Across all subjects" />
+                  </div>
+
+                  {/* NEW DASHBOARD ROLL-UP UI */}
+                  <h3 className="text-xl font-bold mb-4 text-slate-800">Subject Performance Roll-Up</h3>
+                  
+                  {(profile.subjects || []).length === 0 ? (
+                    <div className="text-center py-10 text-slate-400 bg-slate-50 rounded-lg border-2 border-dashed">
+                      No subjects selected. Go to Profile Setup to get started!
+                    </div>
+                  ) : (
+                    <div className="space-y-6">
+                      {(profile.subjects || []).map(subj => {
+                        const subjHistory = performanceHistory.filter(h => h.subject === subj);
+                        const avgScore = subjHistory.length > 0 
+                          ? Math.round(subjHistory.reduce((sum, h) => sum + h.score, 0) / subjHistory.length) 
+                          : null;
+                        
+                        const isExpanded = expandedSubjects[subj];
+                        const syllabusTopics = getSyllabus(subj, (profile.subjectLevels && profile.subjectLevels[subj]) || 'Higher').flatMap(u => u.topics);
+
+                        return (
+                          <div key={subj} className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden transition-all">
+                            <div 
+                              className="p-6 flex justify-between items-center cursor-pointer hover:bg-slate-50 transition-colors"
+                              onClick={() => toggleSubjectExpand(subj)}
+                            >
+                              <div className="flex items-center gap-4">
+                                <h3 className="text-xl font-bold text-slate-800">{subj}</h3>
+                                <span className="bg-indigo-100 text-indigo-800 text-xs font-bold px-3 py-1 rounded-full border border-indigo-200">
+                                  {(profile.subjectLevels && profile.subjectLevels[subj]) || 'Higher'} Level
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-4">
+                                <div className="text-right">
+                                  {avgScore !== null ? (
+                                    <span className={`text-xl font-black ${avgScore >= 80 ? 'text-green-600' : avgScore >= 50 ? 'text-yellow-500' : 'text-red-500'}`}>
+                                      {avgScore}% Avg
+                                    </span>
+                                  ) : (
+                                    <span className="text-sm text-slate-400 font-medium">No quizzes taken</span>
+                                  )}
+                                </div>
+                                <ChevronRight className={`w-5 h-5 text-slate-400 transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
+                              </div>
+                            </div>
+
+                            {isExpanded && (
+                              <div className="border-t border-slate-100 bg-slate-50/50 p-6">
+                                <div className="space-y-3">
+                                  {syllabusTopics.map(topic => {
+                                    const stats = getTopicStats(subj, topic);
+                                    return (
+                                      <div key={topic} className="flex items-center justify-between p-4 bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                                        <span className="text-sm font-bold text-slate-700">{topic}</span>
+                                        {stats ? (
+                                           <div className="flex items-center gap-4">
+                                             <div className="w-32 h-2 bg-slate-100 rounded-full overflow-hidden hidden md:block">
+                                               <div 
+                                                 className={`h-full rounded-full ${stats.avg >= 80 ? 'bg-green-500' : stats.avg >= 50 ? 'bg-yellow-400' : 'bg-red-400'}`} 
+                                                 style={{ width: `${stats.avg}%` }}
+                                               ></div>
+                                             </div>
+                                             <span className="text-sm font-black w-12 text-right">{stats.avg}%</span>
+                                           </div>
+                                        ) : (
+                                           <span className="text-xs text-slate-500 font-medium bg-slate-100 px-3 py-1 rounded-md border border-slate-200">Not tested</span>
+                                        )}
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* --- VIEW: CONTEXT BANK --- */}
+              {activeTab === 'context' && (
+                <div className="max-w-4xl mx-auto space-y-6">
+                  <header className="mb-8">
+                    <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+                      <Database className="text-indigo-600 w-8 h-8" />
+                      Context Bank
+                    </h2>
+                    <p className="text-slate-500 mt-2">Upload your notes, textbook chapters, or past papers here. The AI will strictly use this data to generate quizzes and answer questions, saving costs and dramatically improving accuracy.</p>
+                  </header>
+                  
+                  <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+                    <div className="mb-6">
+                      <label className="block text-sm font-bold text-slate-700 mb-2">Select Subject to Manage</label>
+                      <select 
+                        className="w-full md:w-1/2 p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-slate-800 font-medium"
+                        value={activeSyllabusSubject} 
+                        onChange={(e) => setActiveSyllabusSubject(e.target.value)}
+                      >
+                        {(profile.subjects || []).map(subj => <option key={subj} value={subj}>{subj}</option>)}
+                      </select>
+                    </div>
+
+                    <div className="space-y-4">
+                      <label className="block text-sm font-bold text-slate-700">Saved Context for {activeSyllabusSubject}</label>
+                      <textarea 
+                        className="w-full h-96 p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none resize-none font-mono text-sm shadow-inner"
+                        placeholder={`Paste extensive notes, essays, or syllabus definitions for ${activeSyllabusSubject} here...\n\nAll data is securely saved in your browser's local memory.`}
+                        value={(subjectContexts && subjectContexts[activeSyllabusSubject]) || ''}
+                        onChange={(e) => setSubjectContexts({...subjectContexts, [activeSyllabusSubject]: e.target.value})}
+                        onBlur={() => persistData(profile, performanceHistory, activityLog, subjectContexts)}
+                      ></textarea>
+                      
+                      <div className="flex flex-wrap items-center gap-4">
+                        <label className="cursor-pointer bg-indigo-50 hover:bg-indigo-100 text-indigo-700 px-6 py-3 rounded-xl font-bold transition-colors flex items-center gap-2 shadow-sm border border-indigo-200">
+                          <Upload className="w-5 h-5"/> Append Text File
+                          <input type="file" className="hidden" accept=".txt,.json,.csv" onChange={(e) => handleContextFileUpload(e, 'text', activeSyllabusSubject)} />
+                        </label>
+                        <button 
+                          onClick={() => {
+                            const newContexts = {...subjectContexts, [activeSyllabusSubject]: ''};
+                            setSubjectContexts(newContexts);
+                            persistData(profile, performanceHistory, activityLog, newContexts);
+                          }}
+                          className="px-6 py-3 bg-red-50 text-red-600 hover:bg-red-100 rounded-xl font-bold transition-colors flex items-center gap-2 shadow-sm border border-red-200"
+                        >
+                          <Trash2 className="w-5 h-5"/> Clear Context
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               )}
 
@@ -1141,173 +1303,6 @@
                 </div>
               )}
 
-              {/* --- VIEW: PROFILE --- */}
-              {activeTab === 'profile' && (
-                <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
-                  <h2 className="text-2xl font-bold mb-6 text-slate-800 flex items-center gap-2">
-                    <User className="text-indigo-600" /> Student Profile
-                  </h2>
-                  <div className="space-y-6">
-                    <InputField label="Full Name" value={profile.name} onChange={(e) => setProfile({...profile, name: e.target.value})} placeholder="e.g. Siobhán O'Connor" />
-                    <InputField label="School Name" value={profile.school} onChange={(e) => setProfile({...profile, school: e.target.value})} placeholder="e.g. Presentation College" />
-                    
-                    <div>
-                      <label className="block text-sm font-bold text-slate-700 mb-2">My Subjects & Levels (Core List)</label>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        {LEAVING_CERT_CORE_SUBJECTS.map(subj => {
-                          const isSelected = profile.subjects && profile.subjects.includes(subj);
-                          return (
-                            <div key={subj} className={`flex items-center justify-between p-3 rounded-xl border transition-all ${isSelected ? 'border-indigo-600 bg-indigo-50' : 'border-slate-200 bg-white hover:bg-slate-50'}`}>
-                              <label className="flex items-center gap-3 cursor-pointer flex-1">
-                                <input 
-                                  type="checkbox" 
-                                  checked={isSelected} 
-                                  onChange={() => toggleSubject(subj)}
-                                  className="w-4 h-4 text-indigo-600 focus:ring-indigo-500 rounded"
-                                />
-                                <span className={`font-medium text-sm ${isSelected ? 'text-indigo-800' : 'text-slate-600'}`}>{subj}</span>
-                              </label>
-                              {isSelected && (
-                                <select 
-                                  className="text-sm border border-indigo-200 rounded p-1 bg-white text-indigo-800 outline-none focus:ring-1 focus:ring-indigo-500"
-                                  value={(profile.subjectLevels && profile.subjectLevels[subj]) || 'Higher'}
-                                  onChange={(e) => {
-                                    setProfile({
-                                      ...profile,
-                                      subjectLevels: { ...(profile.subjectLevels || {}), [subj]: e.target.value }
-                                    });
-                                  }}
-                                >
-                                  <option value="Higher">Higher</option>
-                                  <option value="Ordinary">Ordinary</option>
-                                </select>
-                              )}
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    <button onClick={handleSaveProfile} className="mt-4 w-full bg-indigo-600 hover:bg-indigo-700 text-white py-4 rounded-xl font-bold text-lg shadow-md transition-colors">
-                      Save Profile & Sync
-                    </button>
-                  </div>
-
-                  <div className="mt-10 pt-8 border-t border-slate-200">
-                    <h3 className="text-xl font-bold text-slate-800 mb-2 flex items-center gap-2">
-                      <KeyIcon className="w-6 h-6 text-indigo-600" /> Security & API Key
-                    </h3>
-                    <p className="text-sm text-slate-600 mb-6">
-                      Since this app is hosted statically, your API key is stored securely in your own browser's Local Storage. It is never exposed in the code or sent to our servers.
-                    </p>
-                    <InputField 
-                      label="Gemini API Key" 
-                      value={HARDCODED_API_KEY ? 'HARDCODED_KEY_IN_USE' : storedApiKey} 
-                      onChange={(e) => {
-                        const cleanKey = e.target.value.replace(/[\s"']/g, ''); // Instantly clean spaces
-                        setStoredApiKey(cleanKey);
-                        setApiKeyLocal(cleanKey);
-                      }} 
-                      placeholder={HARDCODED_API_KEY ? "Using Hardcoded Key" : "AIzaSy..."} 
-                      type={HARDCODED_API_KEY ? "text" : "password"}
-                      disabled={!!HARDCODED_API_KEY}
-                    />
-                    {!HARDCODED_API_KEY && !storedApiKey && <p className="text-xs text-amber-600 font-bold mt-2">A key is required to use AI features.</p>}
-                  </div>
-                </div>
-              )}
-
-              {/* --- VIEW: ACTIVITY LOG --- */}
-              {activeTab === 'activity' && (
-                <div className="max-w-5xl mx-auto space-y-6">
-                  <header className="mb-8">
-                    <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
-                      <ClipboardList className="text-indigo-600 w-8 h-8" />
-                      Activity Log
-                    </h2>
-                    <p className="text-slate-500 mt-2">Audit trail of your study sessions, questions asked, and quizzes completed.</p>
-                  </header>
-
-                  <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                    {activityLog.length === 0 ? (
-                       <div className="text-center py-10 text-slate-400 bg-slate-50">
-                        No activity recorded yet. Start studying to build your audit log!
-                      </div>
-                    ) : (
-                      <div className="overflow-x-auto">
-                        <table className="w-full text-left border-collapse">
-                          <thead>
-                            <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 text-sm uppercase tracking-wider">
-                              <th className="p-4 font-bold">Date & Time</th>
-                              <th className="p-4 font-bold">Action</th>
-                              <th className="p-4 font-bold">Subject</th>
-                              <th className="p-4 font-bold">Details</th>
-                              <th className="p-4 font-bold">Result</th>
-                            </tr>
-                          </thead>
-                          <tbody className="divide-y divide-slate-100">
-                            {activityLog.map(log => (
-                              <tr key={log.id} className="hover:bg-slate-50 transition-colors">
-                                <td className="p-4 text-sm text-slate-500 whitespace-nowrap">{log.date}</td>
-                                <td className="p-4 text-sm font-bold text-indigo-600 whitespace-nowrap">{log.type}</td>
-                                <td className="p-4 text-sm font-medium text-slate-700 whitespace-nowrap">{log.subject}</td>
-                                <td className="p-4 text-sm text-slate-600">{log.details}</td>
-                                <td className="p-4 text-sm font-bold text-green-600 whitespace-nowrap">{log.result}</td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* --- VIEW: DASHBOARD --- */}
-              {activeTab === 'dashboard' && (
-                <div className="max-w-5xl mx-auto space-y-6">
-                  <header className="mb-8">
-                    <h2 className="text-3xl font-bold text-slate-800">Welcome back, {profile.name || 'Student'}!</h2>
-                    <p className="text-slate-500 mt-2">Let's crush that Leaving Cert.</p>
-                  </header>
-
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <StatCard icon={<Trophy className="text-yellow-500" />} title="Current Level" value={currentLevel} subtitle={`${profile.xp} Total XP`} />
-                    <StatCard icon={<CheckCircle className="text-green-500" />} title="Quizzes Taken" value={performanceHistory.length} subtitle="Keep it up!" />
-                    <StatCard icon={<TrendingUp className="text-indigo-500" />} title="Avg. Score" value={
-                      performanceHistory.length > 0 
-                      ? Math.round(performanceHistory.reduce((acc, curr) => acc + curr.score, 0) / performanceHistory.length) + '%'
-                      : 'N/A'
-                    } subtitle="Across all topics" />
-                  </div>
-
-                  <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
-                    <h3 className="text-xl font-bold mb-4">Topic Competency</h3>
-                    {performanceHistory.length === 0 ? (
-                      <div className="text-center py-10 text-slate-400 bg-slate-50 rounded-lg border-2 border-dashed">
-                        No data yet. Head over to the Syllabus Heatmap or Study tab to take a quiz!
-                      </div>
-                    ) : (
-                      <div className="space-y-4">
-                        {performanceHistory.map((entry, idx) => (
-                          <div key={idx} className="flex items-center gap-4">
-                            <div className="w-24 text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-1 rounded text-center truncate">{entry.subject || 'N/A'}</div>
-                            <div className="w-40 text-sm font-medium text-slate-600 truncate" title={entry.topic}>{entry.topic}</div>
-                            <div className="flex-1 h-4 bg-slate-100 rounded-full overflow-hidden">
-                              <div 
-                                className={`h-full rounded-full ${entry.score > 80 ? 'bg-green-500' : entry.score > 50 ? 'bg-yellow-400' : 'bg-red-400'}`} 
-                                style={{ width: `${entry.score}%` }}
-                              ></div>
-                            </div>
-                            <div className="w-12 text-right text-sm font-bold">{entry.score}%</div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-
               {/* --- VIEW: HOMEWORK TUTOR & LIVE DISCUSSION --- */}
               {activeTab === 'homework' && (
                 <div className="max-w-4xl mx-auto h-[85vh] flex flex-col bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden relative">
@@ -1340,40 +1335,9 @@
                         </button>
                       )}
 
-                      <div className="relative group">
-                        <button className="flex items-center gap-2 text-sm bg-white border border-slate-200 px-3 py-1.5 rounded-md hover:bg-slate-50" disabled={isDiscussionMode}>
-                          <BookOpen className="w-4 h-4"/> Edit Context
-                        </button>
-                        <div className="absolute right-0 top-[100%] pt-2 w-[350px] hidden group-hover:block z-20">
-                          <div className="bg-white border border-slate-200 shadow-xl rounded-xl p-4">
-                            <p className="text-xs text-slate-500 mb-2">Saved Context for <strong>{hwSubjectContext}</strong></p>
-                            <textarea 
-                              className="w-full h-32 p-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none resize-none mb-2 bg-slate-50"
-                              placeholder={`Paste notes or syllabus context for ${hwSubjectContext} here...`}
-                              value={(subjectContexts && subjectContexts[hwSubjectContext]) || ''}
-                              onChange={(e) => setSubjectContexts({...subjectContexts, [hwSubjectContext]: e.target.value})}
-                              onBlur={() => persistData(profile, performanceHistory, activityLog, subjectContexts)}
-                            ></textarea>
-                            <div className="flex items-center gap-2">
-                              <label className="flex-1 cursor-pointer bg-slate-100 hover:bg-slate-200 text-center py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2">
-                                <Upload className="w-4 h-4"/> Upload Text
-                                <input type="file" className="hidden" accept=".txt,.json,.csv" onChange={(e) => handleContextFileUpload(e, 'text', hwSubjectContext)} />
-                              </label>
-                              <button 
-                                onClick={() => {
-                                  const newContexts = {...subjectContexts, [hwSubjectContext]: ''};
-                                  setSubjectContexts(newContexts);
-                                  persistData(profile, performanceHistory, activityLog, newContexts);
-                                }}
-                                className="px-3 py-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg text-sm font-medium transition-colors flex items-center gap-1"
-                                title="Clear Context"
-                              >
-                                <Trash2 className="w-4 h-4"/> Clear
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      <button onClick={() => setActiveTab('context')} className="flex items-center gap-2 text-sm bg-white border border-slate-200 px-3 py-1.5 rounded-md hover:bg-slate-50" disabled={isDiscussionMode}>
+                        <Database className="w-4 h-4"/> Manage Context
+                      </button>
                     </div>
                   </div>
 
@@ -1389,7 +1353,7 @@
                       <div className="h-full flex flex-col items-center justify-center text-slate-400 space-y-4">
                         <MessageSquare className="w-16 h-16 opacity-20" />
                         <p>Ask a question about your {hwSubjectContext} homework.</p>
-                        <p className="text-sm">I'll guide you to the answer, not just give it to you!</p>
+                        <p className="text-sm">I'll rely on your saved Context Bank to guide you to the answer!</p>
                       </div>
                     )}
                     
@@ -1481,29 +1445,33 @@
                         
                         {/* Advanced Context / File Upload Box */}
                         <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 text-left">
-                           <label className="block text-sm font-bold text-slate-700 mb-2">Add Files or Context (Optional)</label>
-                           <p className="text-xs text-slate-500 mb-3">Your saved context for <strong>{quizSubjectContext}</strong> is automatically loaded below. You can also temporarily attach an image to generate questions from.</p>
+                           <label className="block text-sm font-bold text-slate-700 mb-2 flex justify-between items-center">
+                             <span>Context Source</span>
+                             <button onClick={() => setActiveTab('context')} className="text-indigo-600 hover:text-indigo-800 flex items-center gap-1 text-xs">
+                               <Database className="w-3 h-3"/> Manage Context Bank
+                             </button>
+                           </label>
                            
-                           <textarea 
-                             className="w-full h-32 p-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none resize-none mb-3 bg-white"
-                             placeholder={`Saved context for ${quizSubjectContext}...`}
-                             value={(subjectContexts && subjectContexts[quizSubjectContext]) || ''}
-                             onChange={(e) => setSubjectContexts({...subjectContexts, [quizSubjectContext]: e.target.value})}
-                             onBlur={() => persistData(profile, performanceHistory, activityLog, subjectContexts)}
-                           />
+                           {((subjectContexts && subjectContexts[quizSubjectContext]) || '').trim() ? (
+                             <div className="bg-green-50 border border-green-200 text-green-700 text-xs p-3 rounded-lg mb-3 shadow-sm">
+                               <CheckCircle className="w-4 h-4 inline mr-1"/> Utilizing your expansive Context Bank for <strong>{quizSubjectContext}</strong>.
+                             </div>
+                           ) : (
+                             <p className="text-xs text-slate-500 mb-3">No context saved in Bank. You can temporarily attach an image below to generate questions from it.</p>
+                           )}
 
                            <div className="flex items-center gap-2 mb-3">
                              <label className="flex-1 cursor-pointer bg-white border border-slate-300 hover:bg-slate-100 text-center py-2.5 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-sm">
-                               <ImageIcon className="w-4 h-4 text-indigo-500"/> Attach Image / File
-                               <input type="file" className="hidden" accept="image/*,.txt,.csv" onChange={(e) => handleContextFileUpload(e, 'quizMedia', quizSubjectContext)} />
+                               <ImageIcon className="w-4 h-4 text-indigo-500"/> Attach Temporary Image
+                               <input type="file" className="hidden" accept="image/*" onChange={(e) => handleContextFileUpload(e, 'quizMedia', quizSubjectContext)} />
                              </label>
                            </div>
 
                            {/* Upload Confirmations */}
                            {quizMedia && (
-                             <div className="bg-green-50 text-green-700 text-xs p-2 rounded border border-green-200 mb-2 flex justify-between items-center">
+                             <div className="bg-indigo-50 text-indigo-700 text-xs p-2 rounded border border-indigo-200 mb-2 flex justify-between items-center">
                                <span>🖼️ Temporary Image Attached: {quizMedia.name}</span>
-                               <button onClick={() => setQuizMedia(null)} className="font-bold hover:text-green-900">&times;</button>
+                               <button onClick={() => setQuizMedia(null)} className="font-bold hover:text-indigo-900">&times;</button>
                              </div>
                            )}
 
@@ -1644,7 +1612,7 @@
                           return (
                             <div key={idx} className={`bg-white rounded-xl shadow-sm border p-6 ${isPerfect ? 'border-green-200' : 'border-slate-200'}`}>
                               <div className="flex justify-between items-start mb-4">
-                                <p className="font-bold text-slate-800 flex-1"><span className="text-indigo-600 mr-2">Q.</span> {question.questionText}</p>
+                                <p className="font-bold text-slate-800 flex-1"><span className="text-indigo-600 mr-2">Q.</span> {question?.questionText}</p>
                                 <div className={`text-xl font-black px-4 py-2 rounded-lg ml-4 ${isPerfect ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-700'}`}>
                                   {grade.score}/10
                                 </div>
@@ -1678,6 +1646,83 @@
 
                 </div>
               )}
+              
+              {/* --- VIEW: PROFILE --- */}
+              {activeTab === 'profile' && (
+                <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+                  <h2 className="text-2xl font-bold mb-6 text-slate-800 flex items-center gap-2">
+                    <User className="text-indigo-600" /> Student Profile
+                  </h2>
+                  <div className="space-y-6">
+                    <InputField label="Full Name" value={profile.name} onChange={(e) => setProfile({...profile, name: e.target.value})} placeholder="e.g. Siobhán O'Connor" />
+                    <InputField label="School Name" value={profile.school} onChange={(e) => setProfile({...profile, school: e.target.value})} placeholder="e.g. Presentation College" />
+                    
+                    <div>
+                      <label className="block text-sm font-bold text-slate-700 mb-2">My Subjects & Levels (Core List)</label>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        {LEAVING_CERT_CORE_SUBJECTS.map(subj => {
+                          const isSelected = profile.subjects && profile.subjects.includes(subj);
+                          return (
+                            <div key={subj} className={`flex items-center justify-between p-3 rounded-xl border transition-all ${isSelected ? 'border-indigo-600 bg-indigo-50' : 'border-slate-200 bg-white hover:bg-slate-50'}`}>
+                              <label className="flex items-center gap-3 cursor-pointer flex-1">
+                                <input 
+                                  type="checkbox" 
+                                  checked={isSelected} 
+                                  onChange={() => toggleSubject(subj)}
+                                  className="w-4 h-4 text-indigo-600 focus:ring-indigo-500 rounded"
+                                />
+                                <span className={`font-medium text-sm ${isSelected ? 'text-indigo-800' : 'text-slate-600'}`}>{subj}</span>
+                              </label>
+                              {isSelected && (
+                                <select 
+                                  className="text-sm border border-indigo-200 rounded p-1 bg-white text-indigo-800 outline-none focus:ring-1 focus:ring-indigo-500"
+                                  value={(profile.subjectLevels && profile.subjectLevels[subj]) || 'Higher'}
+                                  onChange={(e) => {
+                                    setProfile({
+                                      ...profile,
+                                      subjectLevels: { ...(profile.subjectLevels || {}), [subj]: e.target.value }
+                                    });
+                                  }}
+                                >
+                                  <option value="Higher">Higher</option>
+                                  <option value="Ordinary">Ordinary</option>
+                                </select>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    <button onClick={handleSaveProfile} className="mt-4 w-full bg-indigo-600 hover:bg-indigo-700 text-white py-4 rounded-xl font-bold text-lg shadow-md transition-colors">
+                      Save Profile & Sync
+                    </button>
+                  </div>
+
+                  <div className="mt-10 pt-8 border-t border-slate-200">
+                    <h3 className="text-xl font-bold text-slate-800 mb-2 flex items-center gap-2">
+                      <KeyIcon className="w-6 h-6 text-indigo-600" /> Security & API Key
+                    </h3>
+                    <p className="text-sm text-slate-600 mb-6">
+                      Since this app is hosted statically, your API key is stored securely in your own browser's Local Storage. It is never exposed in the code or sent to our servers.
+                    </p>
+                    <InputField 
+                      label="Gemini API Key" 
+                      value={HARDCODED_API_KEY ? 'HARDCODED_KEY_IN_USE' : storedApiKey} 
+                      onChange={(e) => {
+                        const cleanKey = e.target.value.replace(/[\s"']/g, ''); // Instantly clean spaces
+                        setStoredApiKey(cleanKey);
+                        setApiKeyLocal(cleanKey);
+                      }} 
+                      placeholder={HARDCODED_API_KEY ? "Using Hardcoded Key" : "AIzaSy..."} 
+                      type={HARDCODED_API_KEY ? "text" : "password"}
+                      disabled={!!HARDCODED_API_KEY}
+                    />
+                    {!HARDCODED_API_KEY && !storedApiKey && <p className="text-xs text-amber-600 font-bold mt-2">A key is required to use AI features.</p>}
+                  </div>
+                </div>
+              )}
+
             </main>
           </div>
         );
