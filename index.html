@@ -14,7 +14,6 @@
     <script type="text/babel">
       const { useState, useEffect, useRef } = React;
       
-      // --- Icons ---
       const BookOpen = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>;
       const User = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>;
       const PenTool = ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m12 19 7-7 3 3-7 7-3-3z"/><path d="m18 13-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="m2 2 7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>;
@@ -161,7 +160,14 @@
         }
       };
 
-      const LEAVING_CERT_CORE_SUBJECTS = ["English", "Geography", "Maths", "Art", "Technology", "Biology"];
+      const LEAVING_CERT_CORE_SUBJECTS = [
+        "Accounting", "Agricultural Science", "Applied Maths", "Art", "Biology",
+        "Business", "Chemistry", "Classical Studies", "Computer Science", "Construction",
+        "Design Communication Graphics", "Economics", "Engineering", "English", "French",
+        "Geography", "German", "History", "Home Economics", "Irish", "Italian",
+        "Mathematics", "Music", "Physical Education", "Physics", "Politics And Society",
+        "Religion", "Spanish", "Technology"
+      ];
 
       const SYLLABUS_DATA = {
         "English": {
@@ -177,7 +183,7 @@
             { title: "Paper 2: Poetry", topics: ["Prescribed Poetry (Core Themes)", "Unseen Poetry (Personal Response)"] }
           ]
         },
-        "Maths": {
+        "Mathematics": {
           "Higher": [
             { title: "Strand 1: Statistics and Probability", topics: ["Representing Data", "Statistical Measures", "Probability Theory", "Bernoulli Trials", "Normal Distribution & Inferential Statistics"] },
             { title: "Strand 2: Geometry and Trigonometry", topics: ["Synthetic Geometry", "Co-ordinate Geometry (Line & Circle)", "Trigonometry (2D and 3D)", "Trigonometric Functions & Formulas"] },
@@ -228,8 +234,14 @@
       };
 
       const getSyllabus = (subject, level) => {
-        if (!SYLLABUS_DATA[subject]) return [];
-        return SYLLABUS_DATA[subject][level] || SYLLABUS_DATA[subject]["Higher"];
+        if (!SYLLABUS_DATA[subject]) {
+          // Provide generic fallback topics for missing subjects so the heatmap works
+          return [{ 
+            title: "General Syllabus", 
+            topics: ["Core Concepts", "Applied Problems", "Past Paper Practice"] 
+          }];
+        }
+        return SYLLABUS_DATA[subject][level] || SYLLABUS_DATA[subject]["Higher"] || [];
       };
 
       // --- Main Application Component ---
@@ -840,26 +852,47 @@
           const topicInstruction = quizTopic ? `Topic: "${quizTopic}"` : "Create questions based on the provided uploaded file/image/saved context content.";
           const contextInstruction = hasContext ? `\nUse this context material provided by the student:\n${hasContext}` : "";
 
-          // NEW: Strict formatting rules per subject to prevent English timeline diagrams
           let subjectRules = "";
           switch(quizSubjectContext) {
             case "English":
-              subjectRules = "Use standard English exam formats: Paragraph responses, thematic analysis, or quote analysis. STRICT RULE: ABSOLUTELY NO diagrams, charts, or timelines. All answers must be entirely text-based.";
+            case "Irish":
+            case "French":
+            case "German":
+            case "Spanish":
+            case "Italian":
+            case "History":
+            case "Classical Studies":
+            case "Religion":
+            case "Politics And Society":
+              subjectRules = "Use standard humanities/language exam formats: Paragraph responses, thematic analysis, or quote analysis. STRICT RULE: ABSOLUTELY NO diagrams, charts, or timelines. All answers must be entirely text-based.";
               break;
-            case "Maths":
-              subjectRules = "Use standard Maths exam formats: Problem-solving, algebraic equations, geometry proofs, or functions/graphs. Require diagram/working uploads frequently.";
+            case "Mathematics":
+            case "Applied Maths":
+            case "Physics":
+            case "Chemistry":
+            case "Accounting":
+            case "Economics":
+              subjectRules = "Use standard STEM/Business exam formats: Problem-solving, algebraic equations, geometry proofs, calculations, or functions/graphs. Require diagram/working uploads frequently.";
               break;
             case "Geography":
             case "Biology":
             case "Technology":
             case "Art":
+            case "Agricultural Science":
+            case "Construction":
+            case "Design Communication Graphics":
+            case "Engineering":
+            case "Home Economics":
+            case "Computer Science":
+            case "Physical Education":
+            case "Music":
+            case "Business":
               subjectRules = "Use standard science/applied formats: Definitions, process explanations, and labeled diagrams/sketches. You may ask for a diagram if it is a typical exam requirement for this topic.";
               break;
             default:
               subjectRules = "Use standard short answer formats. Only ask for diagrams if it is a standard exam requirement.";
           }
 
-          // NEW: Added Anti-Repetition Rule
           const prompt = `Generate 3 distinct, exam-standard questions for the subject: ${quizSubjectContext}.\n${topicInstruction}\n${sourceInstruction}${contextInstruction}
           Ensure the questions match the exact difficulty and styling of the Irish Leaving Cert ${currentQuizLevel} level.
           
@@ -1649,17 +1682,19 @@
               
               {/* --- VIEW: PROFILE --- */}
               {activeTab === 'profile' && (
-                <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+                <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
                   <h2 className="text-2xl font-bold mb-6 text-slate-800 flex items-center gap-2">
                     <User className="text-indigo-600" /> Student Profile
                   </h2>
                   <div className="space-y-6">
-                    <InputField label="Full Name" value={profile.name} onChange={(e) => setProfile({...profile, name: e.target.value})} placeholder="e.g. Siobhán O'Connor" />
-                    <InputField label="School Name" value={profile.school} onChange={(e) => setProfile({...profile, school: e.target.value})} placeholder="e.g. Presentation College" />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <InputField label="Full Name" value={profile.name} onChange={(e) => setProfile({...profile, name: e.target.value})} placeholder="e.g. Siobhán O'Connor" />
+                      <InputField label="School Name" value={profile.school} onChange={(e) => setProfile({...profile, school: e.target.value})} placeholder="e.g. Presentation College" />
+                    </div>
                     
                     <div>
-                      <label className="block text-sm font-bold text-slate-700 mb-2">My Subjects & Levels (Core List)</label>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <label className="block text-sm font-bold text-slate-700 mb-2">My Subjects & Levels</label>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                         {LEAVING_CERT_CORE_SUBJECTS.map(subj => {
                           const isSelected = profile.subjects && profile.subjects.includes(subj);
                           return (
